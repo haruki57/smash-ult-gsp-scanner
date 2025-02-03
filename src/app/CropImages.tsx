@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { Image } from "image-js";
 
 interface Props {
@@ -12,20 +12,12 @@ export const CropImages = ({
   setGspImg,
   setFighterNameImg,
 }: Props) => {
-  const firstRender = useRef(true);
-
-  // image processing
   useEffect(() => {
-    if (firstRender.current) {
-      firstRender.current = false;
-      return;
-    }
-
     const getGspImg = async () => {
       const image = await Image.load(capImage);
       if (image) {
         const ocrImg = image
-          .crop({ x: 1500, y: 720, width: 300, height: 60 })
+          .crop({ x: 1500 / 2, y: 720 / 2, width: 300 / 2, height: 60 / 2 })
           .grey()
           .mask({ threshold: 180 })
           .toBase64("image/png");
@@ -36,7 +28,7 @@ export const CropImages = ({
       const image = await Image.load(capImage);
       if (image) {
         const ocrImg = image
-          .crop({ x: 470, y: 845, width: 450, height: 70 })
+          .crop({ x: 470 / 2, y: 845 / 2, width: 450 / 2, height: 70 / 2 })
           .grey()
           .mask({ threshold: 180 })
           .toBase64("image/png");
