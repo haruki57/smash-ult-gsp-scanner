@@ -20,7 +20,7 @@ export default function ClientTop() {
     }
   }, [webcamRef]);
   useEffect(() => {
-    const interval = setInterval(capture, 1000 / 60);
+    const interval = setInterval(capture, 1000 / 30);
     return () => clearInterval(interval);
   });
   return (

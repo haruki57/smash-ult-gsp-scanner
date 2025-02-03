@@ -28,20 +28,19 @@ export const Ocr = ({ capImage }: Props) => {
         return;
       }
       let output = "";
-      if (gspImage !== "") {
-        const gsp = await ocrWorker.recognize(gspImage);
-        if (!gsp) {
-          return;
-        }
-        output += gsp?.data?.text?.trim();
+      if (gspImage === "" || fighterNameImage === "") {
+        return;
       }
-      if (fighterNameImage !== "") {
-        const fighterName = await ocrWorker.recognize(fighterNameImage);
-        if (!fighterName) {
-          return;
-        }
-        output += " " + fighterName?.data?.text?.trim();
+      const gsp = await ocrWorker.recognize(gspImage);
+      if (!gsp) {
+        return;
       }
+      output += gsp?.data?.text?.trim();
+      const fighterName = await ocrWorker.recognize(fighterNameImage);
+      if (!fighterName) {
+        return;
+      }
+      output += " " + fighterName?.data?.text?.trim();
       console.log(output);
       await ocrWorker.terminate();
     })();
