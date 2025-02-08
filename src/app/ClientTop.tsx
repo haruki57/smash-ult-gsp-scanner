@@ -47,6 +47,12 @@ const tierList = [
 export default function ClientTop() {
   const [videoId, setVideoId] = useState<string>("");
   const webcamRef = React.useRef<Webcam>(null);
+  // const [fighters, setFighters] = useState<
+  //   { fighterName: string; gsp: number }[]
+  // >([]);
+  const [fighterToGsp, setFighterToGsp] = useState<{ [key in string]: number }>(
+    {}
+  );
 
   const [capImage, setCapImage] = useState<string>("");
   const capture = React.useCallback(() => {
@@ -59,14 +65,12 @@ export default function ClientTop() {
     }
   }, [webcamRef]);
   useEffect(() => {
-    const interval = setInterval(capture, 1000 / 1);
+    const interval = setInterval(capture, 1000 / 30);
     return () => clearInterval(interval);
   });
   return (
     <>
-      {/*         
       <div className="w-[640px] aspect-video">
-
         <Webcam
           className="w-full aspect-video"
           audio={false}
@@ -80,7 +84,15 @@ export default function ClientTop() {
         />
       </div>
       <VideoList setVideoId={setVideoId} />
-      <Ocr capImage={capImage}></Ocr> */}
+      <Ocr
+        capImage={capImage}
+        addFighter={(fighterName, gsp) => {
+          console.log("hoge", fighterName, gsp);
+          setFighterToGsp({ ...fighterToGsp, [fighterName]: gsp });
+          //setFighters((fighters) => [...fighters, { fighterName, gsp }]);
+        }}
+      ></Ocr>
+      <div>{JSON.stringify(fighterToGsp)}</div>
 
       {/* <div className="m-8">
         <GspChart data={characterData} />

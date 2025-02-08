@@ -12,12 +12,17 @@ const greyAlgorithm: GreyAlgorithmCallback = (
   green: number,
   blue: number
 ) => {
+  // 未プレイのファイターの数字の色は62 122 195
+  // 既プレイは105 121 131
+  /*
   if (blue > 150) {
     return 255;
   }
+  */
+
   // 加重平均法によるグレースケール変換
   return Math.round(0.2989 * red + 0.587 * green + 0.114 * blue);
-  // 単純平均法によるグレースケール変換
+  // 単純平均法によるグレースケール変換1
   //return Math.round((red + green + blue) / 3);
 };
 
