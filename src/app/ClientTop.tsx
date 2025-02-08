@@ -4,6 +4,14 @@ import React, { useEffect, useState } from "react";
 import Webcam from "react-webcam";
 import { VideoList } from "./SelectVideo";
 import Ocr from "./Ocr";
+import GspChart from "./GspChart";
+
+const characterData = {
+  マリオ: 14000000,
+  リンク: 15500000,
+  サムス: 14500000,
+  カービィ: 9000000,
+};
 
 export default function ClientTop() {
   const [videoId, setVideoId] = useState<string>("");
@@ -20,12 +28,14 @@ export default function ClientTop() {
     }
   }, [webcamRef]);
   useEffect(() => {
-    const interval = setInterval(capture, 1000 / 30);
+    const interval = setInterval(capture, 1000 / 1);
     return () => clearInterval(interval);
   });
   return (
     <>
+      {/*         
       <div className="w-[640px] aspect-video">
+
         <Webcam
           className="w-full aspect-video"
           audio={false}
@@ -39,7 +49,11 @@ export default function ClientTop() {
         />
       </div>
       <VideoList setVideoId={setVideoId} />
-      <Ocr capImage={capImage}></Ocr>
+      <Ocr capImage={capImage}></Ocr> */}
+
+      <div className="m-8">
+        <GspChart data={characterData} />
+      </div>
     </>
   );
 }
