@@ -5,13 +5,44 @@ import Webcam from "react-webcam";
 import { VideoList } from "./SelectVideo";
 import Ocr from "./Ocr";
 import GspChart from "./GspChart";
+import TierList from "./TierList";
 
-const characterData = {
-  マリオ: 14000000,
-  リンク: 15500000,
-  サムス: 14500000,
-  カービィ: 9000000,
-};
+const tierList = [
+  {
+    tierLabel: "S",
+    fighters: [
+      {
+        fighterId: "mario",
+        gsp: 15432456,
+      },
+      {
+        fighterId: "luigi",
+        gsp: 15432456,
+      },
+      {
+        fighterId: "donkey",
+        gsp: 15432456,
+      },
+    ],
+  },
+  {
+    tierLabel: "A",
+    fighters: [
+      {
+        fighterId: "mario",
+        gsp: 15432456,
+      },
+      {
+        fighterId: "luigi",
+        gsp: 15432456,
+      },
+      {
+        fighterId: "donkey",
+        gsp: 15432456,
+      },
+    ],
+  },
+];
 
 export default function ClientTop() {
   const [videoId, setVideoId] = useState<string>("");
@@ -51,9 +82,11 @@ export default function ClientTop() {
       <VideoList setVideoId={setVideoId} />
       <Ocr capImage={capImage}></Ocr> */}
 
-      <div className="m-8">
+      {/* <div className="m-8">
         <GspChart data={characterData} />
-      </div>
+      </div> */}
+
+      <TierList data={tierList} />
     </>
   );
 }
