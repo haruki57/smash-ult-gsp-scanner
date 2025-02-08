@@ -30,7 +30,6 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
       if (!ocrWorker) {
         return;
       }
-      let output = "";
       if (gspImage === "" || fighterNameImage === "") {
         return;
       }
@@ -39,24 +38,27 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
       if (!fighterName) {
         return;
       }
+      const fighterId = getFighterId(fighterName?.data?.text?.trim());
+      if (!fighterId) {
+        return;
+      }
       setSet((set) => {
         return new Set([...set, fighterName?.data?.text?.trim()]);
       });
-      output += fighterName?.data?.text?.trim();
+
       const gsp = await ocrWorker.recognize(gspImage);
       if (!gsp) {
         return;
       }
-      output += " " + gsp?.data?.text?.trim();
+      const output =
+        fighterName?.data?.text?.trim() + " " + gsp?.data?.text?.trim();
       console.log(output);
-      const fighterId = getFighterId(fighterName?.data?.text?.trim());
-      if (fighterId) {
-        addFighter(
-          fighterId,
-          Number(gsp?.data?.text?.trim().replace(".", "").replaceAll(",", ""))
-        );
-      }
-      await ocrWorker.terminate();
+
+      addFighter(
+        fighterId,
+        Number(gsp?.data?.text?.trim().replace(".", "").replaceAll(",", ""))
+      );
+      //await ocrWorker.terminate();
     })();
   }, [gspImage, fighterNameImage, initWorker, ocrWorker, addFighter]);
 
@@ -67,8 +69,9 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
         setGspImg={setGspImage}
         setFighterNameImg={setFighterNameImage}
       />
-      {/*
       <div>{set.size}</div>
+      {/*
+      
       <div>
         {Array.from(set).map((fighterName) => (
           <img
