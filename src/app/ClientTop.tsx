@@ -7,7 +7,7 @@ import Ocr from "./Ocr";
 import GspChart from "./GspChart";
 import TierList from "./TierList";
 import { VIDEO_SIZE_RATIO } from "@/utils/commons";
-import { fighterIdList } from "@/utils/getFighterIdId";
+import { fighterIdList } from "@/utils/getFighterId";
 import processImage from "@/utils/processImage";
 
 interface ClientTopProps {

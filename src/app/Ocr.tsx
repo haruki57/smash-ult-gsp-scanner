@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useState } from "react";
 import Tesseract, { createWorker } from "tesseract.js";
-import { getFighterId as getFighterId } from "@/utils/getFighterIdId";
+import { getFighterId } from "@/utils/getFighterId";
 import { GspType } from "./ClientTop";
 
 type Props = {
