@@ -40,7 +40,7 @@ const generateTierList = (
     const tier: Tier = { tierLabel: rank.name, fighters: [] };
     tiers.push(tier);
   }
-  //tiers.push({ tierLabel: "VIP外", fighters: [] });
+  tiers.push({ tierLabel: "~9", fighters: [] });
   //tiers.push({ tierLabel: "未スキャン/未プレイ", fighters: [] });
 
   sortedFighters.forEach((fighter) => {
@@ -54,7 +54,7 @@ const generateTierList = (
         .find((tier) => tier.tierLabel === rank.name)
         ?.fighters.push(fighter);
     } else {
-      tiers[tiers.length - 2].fighters.push(fighter);
+      tiers[tiers.length - 1].fighters.push(fighter);
     }
   });
 
@@ -116,7 +116,7 @@ const TierList: React.FC<TierListProps> = ({
             <div className="flex flex-wrap gap-2">
               {tier.fighters.map((fighter) => (
                 <div key={fighter.fighterId} className="relative">
-                  <div className="border border-gray-500 rounded object-cover w-[40px] h-[40px]">
+                  <div className="border border-gray-500 rounded object-cover w-[42px] h-[42px]">
                     {/* Image tag cannot be treated by html2canvas correctly */}
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
@@ -135,9 +135,20 @@ const TierList: React.FC<TierListProps> = ({
           </div>
         ))}
         <div className="text-right text-gray-500 text-xs mt-4">
-          {`世界戦闘力の値は${new Date()
+          {`${new Date()
             .toISOString()
-            .slice(0, 10)}時点でのクマメイトツール様の推定値を使用しています`}
+            .slice(0, 10)}時点でのVIPボーダー推定値: ${vipBorder}`}
+        </div>
+        <div className="text-right text-gray-500 text-xs">
+          世界戦闘力の値は時点での
+          <a
+            href="https://kumamate.net/vip/"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            クマメイトツール様
+          </a>
+          の推定値を使用しています
         </div>
         <div className="text-right text-gray-500 text-xs mt-4">
           https://gsp-vis.harukisb.net/
