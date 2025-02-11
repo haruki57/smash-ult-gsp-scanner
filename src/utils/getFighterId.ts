@@ -1,4 +1,6 @@
-const map: { [key in string]:string} = {
+// 日本語の読み違いはブラウザや解像度によって違うので注意。ここに載っているはChromeのもの。
+
+const map: { [key in string]: string } = {
   "Banjo&Kazooie": "banjo",
   "バンジョー&カズーイ": "banjo",
   "人ンジョー&カズーイ": "banjo",

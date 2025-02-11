@@ -7,7 +7,7 @@ import Ocr from "./Ocr";
 import GspChart from "./GspChart";
 import TierList from "./TierList";
 import { VIDEO_SIZE_RATIO } from "@/utils/commons";
-import { fighterIdList } from "@/utils/getFighterId";
+import { fighterIdList, getFighterId } from "@/utils/getFighterId";
 import processImage from "@/utils/processImage";
 
 interface ClientTopProps {
@@ -79,8 +79,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   }, [capture]);
 
   const unlistedFighters = Object.keys(fighterToGsp).filter(
-    (fighter) =>
-      fighterToGsp[fighter] === undefined || fighterToGsp[fighter] === "no gsp"
+    (fighter) => fighterToGsp[fighter] === undefined
   );
 
   return (
@@ -104,6 +103,17 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
       <div>{gspImage !== "" && <img src={gspImage} alt="" />}</div>
       <div>
         {fighterNameImage !== "" && <img src={fighterNameImage} alt="" />}
+      </div>
+
+      <div className="flex flex-wrap gap-2">
+        {unlistedFighters.map((fighterName) => (
+          <img
+            key={fighterName as string}
+            width={40}
+            height={40}
+            src={`/fighters/${fighterName}.png`}
+          />
+        ))}
       </div>
       <Ocr
         gspImage={gspImage}

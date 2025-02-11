@@ -15,7 +15,7 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
 
   const initWorker = useCallback(async () => {
     if (!ocrWorker) {
-      const worker = await createWorker("jpn", Tesseract.OEM.LSTM_ONLY);
+      const worker = await createWorker("eng", Tesseract.OEM.LSTM_ONLY);
       worker.setParameters({
         tessedit_pageseg_mode: Tesseract.PSM.SINGLE_LINE,
       });
