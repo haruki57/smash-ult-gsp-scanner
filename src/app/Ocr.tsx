@@ -1,17 +1,15 @@
 import React, { useCallback, useEffect, useState } from "react";
-import CropImages from "./CropImages";
 import Tesseract, { createWorker } from "tesseract.js";
 import { getFighterId as getFighterId } from "@/utils/getFighterIdId";
 import { GspType } from "./ClientTop";
 
 type Props = {
-  capImage: string;
+  gspImage: string;
+  fighterNameImage: string;
   addFighter: (fighterName: string, gsp: GspType) => void;
 };
 
-export const Ocr = ({ capImage, addFighter }: Props) => {
-  const [gspImage, setGspImage] = useState<string>("");
-  const [fighterNameImage, setFighterNameImage] = useState<string>("");
+export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
   const [ocrWorker, setOcrWorker] = useState<Tesseract.Worker | null>(null);
   const [set, setSet] = useState(new Set());
 
@@ -31,21 +29,25 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
       if (!ocrWorker) {
         return;
       }
-      if (gspImage === "" || fighterNameImage === "") {
+      if (gspImage === "" && fighterNameImage === "") {
         return;
       }
-
       const fighterName = await ocrWorker.recognize(fighterNameImage);
       if (!fighterName) {
         return;
       }
       const fighterId = getFighterId(fighterName?.data?.text?.trim());
+      //console.log(fighterName?.data?.text?.trim(), fighterId);
       if (!fighterId) {
         return;
       }
       setSet((set) => {
         return new Set([...set, fighterName?.data?.text?.trim()]);
       });
+      if (gspImage === "") {
+        addFighter(fighterId, "no gsp");
+        return;
+      }
 
       const gsp = await ocrWorker.recognize(gspImage);
       const trimmedGsp = gsp?.data?.text?.trim();
@@ -72,11 +74,6 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
 
   return (
     <>
-      <CropImages
-        capImage={capImage}
-        setGspImg={setGspImage}
-        setFighterNameImg={setFighterNameImage}
-      />
       <div>{set.size}</div>
       {/*
       
@@ -99,7 +96,7 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
           .join("\n")}
       </pre>
 
-       <div>{gspImage != "" && <img src={gspImage} alt="" />}</div>
+      <div>{gspImage != "" && <img src={gspImage} alt="" />}</div>
       <div>
         {fighterNameImage != "" && <img src={fighterNameImage} alt="" />}
       </div> */}

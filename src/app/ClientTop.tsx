@@ -8,6 +8,7 @@ import GspChart from "./GspChart";
 import TierList from "./TierList";
 import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 import { fighterIdList } from "@/utils/getFighterIdId";
+import processImage from "@/utils/processImage";
 
 interface ClientTopProps {
   vipBorder: number;
@@ -49,20 +50,33 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   const [fighterToGsp, setFighterToGsp] =
     useState<{ [key in string]: GspType }>(initialFighterToGsp);
 
-  const [capImage, setCapImage] = useState<string>("");
-  const capture = React.useCallback(() => {
+  const [gspImage, setGspImage] = useState<string>("");
+  const [fighterNameImage, setFighterNameImage] = useState<string>("");
+  const capture = React.useCallback(async () => {
     const imageSrc = webcamRef.current?.getScreenshot({
       width: 1920 / VIDEO_SIZE_RATIO,
       height: 1080 / VIDEO_SIZE_RATIO,
     });
-    if (imageSrc) {
-      setCapImage(imageSrc);
+    if (!imageSrc) {
+      return;
     }
-  }, [webcamRef]);
+    const { fighterNameImage: newFighterNameImage, gspImage: newGspImage } =
+      await processImage({
+        capturedImage: imageSrc,
+      });
+    if (newFighterNameImage === "" && gspImage === "") {
+      return;
+    }
+    if (fighterNameImage !== newFighterNameImage) {
+      console.log("fighterNameImage changed");
+      setFighterNameImage(newFighterNameImage);
+      setGspImage(newGspImage);
+    }
+  }, [webcamRef, fighterNameImage, gspImage]);
   useEffect(() => {
-    const interval = setInterval(capture, 1000 / 15);
+    const interval = setInterval(capture, 1000 / 60);
     return () => clearInterval(interval);
-  });
+  }, [capture]);
 
   const unlistedFighters = Object.keys(fighterToGsp).filter(
     (fighter) =>
@@ -87,9 +101,17 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
         )}
       </div>
       <VideoList setVideoId={setVideoId} />
+      <div>{gspImage !== "" && <img src={gspImage} alt="" />}</div>
+      <div>
+        {fighterNameImage !== "" && <img src={fighterNameImage} alt="" />}
+      </div>
       <Ocr
-        capImage={capImage}
+        gspImage={gspImage}
+        fighterNameImage={fighterNameImage}
         addFighter={(fighterName, gsp) => {
+          if (fighterToGsp[fighterName]) {
+            return;
+          }
           setFighterToGsp((fighterToGsp) => {
             return { ...fighterToGsp, [fighterName]: gsp };
           });
