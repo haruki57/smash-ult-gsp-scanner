@@ -13,6 +13,7 @@ import {
   ReferenceLine,
   Legend,
 } from "recharts";
+import { GspType } from "./ClientTop";
 
 /*
 const multi = [
@@ -28,7 +29,7 @@ type Rank = {
 };
 
 interface GspChartProps {
-  data: { [name: string]: number };
+  data: { [name: string]: GspType };
   vipBorder: number;
   ranks: Rank[];
 }
@@ -39,12 +40,19 @@ const GspChart = ({ data, vipBorder, ranks }: GspChartProps) => {
   const ticks = startFromZero
     ? [5000000, 10000000, 15000000]
     : [minPower, 15000000];
-  const maxPower = Math.max(...Object.values(data)) * 1.01;
+  const maxPower =
+    Math.max(
+      ...(Object.values(data).filter(
+        (gsp) => gsp !== "no gsp" && gsp !== undefined
+      ) as number[])
+    ) * 1.01;
   // data (props) はキャラクター名をキー、世界戦闘力をバリューとするオブジェクト
-  const chartData = Object.entries(data).map(([name, gsp]) => ({
-    name,
-    gsp: Math.max(minPower, gsp),
-  }));
+  const chartData = Object.entries(data)
+    .filter((d) => typeof d[1] === "number")
+    .map(([name, gsp]) => ({
+      name,
+      gsp: Math.max(minPower, gsp as number),
+    }));
 
   const lines = ranks.map((rank) => ({
     gsp: vipBorder * rank.multiplier,
@@ -60,7 +68,7 @@ const GspChart = ({ data, vipBorder, ranks }: GspChartProps) => {
         <BarChart
           layout="vertical"
           width={600}
-          height={data.length * 40}
+          height={Object.entries(data).length * 40}
           data={chartData}
           margin={{ top: 20, right: 80, left: 100, bottom: 20 }}
         >

@@ -90,6 +90,8 @@ const map: { [key in string]:string} = {
   ZeroSuitSamus:"zerosuit_samus", 
 } as const
 
+export const fighterIdList = Array.from(new Set(Object.values(map)));
+
 const normalize = (name: string) => {
   return name.trim().replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("/", "");
 }

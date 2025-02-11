@@ -1,10 +1,12 @@
-import Image from "next/image";
+"use client";
+
 import React, { useRef } from "react";
 import html2canvas from "html2canvas";
+import { GspType } from "./ClientTop";
 
 type Fighter = {
   fighterId: string;
-  gsp: number;
+  gsp: GspType;
 };
 
 type Tier = {
@@ -19,31 +21,34 @@ type TierListProps = {
     multiplier: number;
   }[];
   fighterToGsp: {
-    [key: string]: number;
+    [key: string]: GspType;
   };
 };
 
 const generateTierList = (
-  fighterToGsp: { [key: string]: number },
+  fighterToGsp: { [key: string]: GspType },
   vipBorder: number,
   ranks: { name: string; multiplier: number }[]
 ) => {
   const sortedFighters = Object.entries(fighterToGsp)
+    .filter(([_, gsp]) => typeof gsp === "number")
     .map(([fighterId, gsp]) => ({ fighterId, gsp }))
-    .sort((a, b) => b.gsp - a.gsp);
+    .sort((a, b) => (b.gsp as number) - (a.gsp as number));
 
   const tiers: Tier[] = [];
   for (const rank of ranks) {
     const tier: Tier = { tierLabel: rank.name, fighters: [] };
     tiers.push(tier);
   }
-  tiers.push({ tierLabel: "VIP外", fighters: [] });
-  tiers.push({ tierLabel: "未スキャン/未プレイ", fighters: [] });
+  //tiers.push({ tierLabel: "VIP外", fighters: [] });
+  //tiers.push({ tierLabel: "未スキャン/未プレイ", fighters: [] });
 
   sortedFighters.forEach((fighter) => {
-    const rank = ranks.find(
-      (rank) => fighter.gsp >= vipBorder * rank.multiplier
-    );
+    const gsp = fighter.gsp;
+    if (gsp === "no gsp" || gsp === undefined) {
+      return;
+    }
+    const rank = ranks.find((rank) => gsp >= vipBorder * rank.multiplier);
     if (rank) {
       tiers
         .find((tier) => tier.tierLabel === rank.name)
