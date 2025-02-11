@@ -74,7 +74,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
     }
   }, [webcamRef, fighterNameImage, gspImage]);
   useEffect(() => {
-    const interval = setInterval(capture, 1000 / 60);
+    const interval = setInterval(capture, 1000 / 30);
     return () => clearInterval(interval);
   }, [capture]);
 
