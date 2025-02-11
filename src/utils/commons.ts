@@ -1,0 +1,1 @@
+export const VIDEO_SIZE_RATIO = 2;

@@ -6,6 +6,7 @@ import { VideoList } from "./SelectVideo";
 import Ocr from "./Ocr";
 import GspChart from "./GspChart";
 import TierList from "./TierList";
+import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 
 const tierList = [
   {
@@ -62,8 +63,8 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   const [capImage, setCapImage] = useState<string>("");
   const capture = React.useCallback(() => {
     const imageSrc = webcamRef.current?.getScreenshot({
-      width: 1920 / 2,
-      height: 1080 / 2,
+      width: 1920 / VIDEO_SIZE_RATIO,
+      height: 1080 / VIDEO_SIZE_RATIO,
     });
     if (imageSrc) {
       setCapImage(imageSrc);

@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { Image, GreyAlgorithmCallback } from "image-js";
+import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 
 interface Props {
   capImage: string;
@@ -39,7 +40,12 @@ export const CropImages = ({
       }
 
       const processingImg = originalImg
-        .crop({ x: 1500 / 2, y: 720 / 2, width: 300 / 2, height: 60 / 2 })
+        .crop({
+          x: 1500 / VIDEO_SIZE_RATIO,
+          y: 720 / VIDEO_SIZE_RATIO,
+          width: 300 / VIDEO_SIZE_RATIO,
+          height: 60 / VIDEO_SIZE_RATIO,
+        })
         .grey({ algorithm: greyAlgorithm })
         .mask({ threshold: 180 });
       let sum = 0;
@@ -62,7 +68,12 @@ export const CropImages = ({
       setGspImg("data:image/png;base64," + gspImg);
 
       const nameImg = originalImg
-        .crop({ x: 470 / 2, y: 845 / 2, width: 450 / 2, height: 70 / 2 })
+        .crop({
+          x: 470 / VIDEO_SIZE_RATIO,
+          y: 845 / VIDEO_SIZE_RATIO,
+          width: 450 / VIDEO_SIZE_RATIO,
+          height: 70 / VIDEO_SIZE_RATIO,
+        })
         .grey()
         .mask({ threshold: 180 })
         .toBase64("image/png");
