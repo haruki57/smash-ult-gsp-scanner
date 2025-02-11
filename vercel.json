@@ -1,0 +1,7 @@
+{
+  "build": {
+    "env": {
+      "DISABLE_CANVAS": "1"
+    }
+  }
+}
