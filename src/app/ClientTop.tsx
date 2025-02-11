@@ -44,12 +44,17 @@ const tierList = [
   },
 ];
 
-export default function ClientTop() {
+interface ClientTopProps {
+  vipBorder: number;
+  ranks: {
+    name: string;
+    multiplier: number;
+  }[];
+}
+
+export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   const [videoId, setVideoId] = useState<string>("");
   const webcamRef = React.useRef<Webcam>(null);
-  // const [fighters, setFighters] = useState<
-  //   { fighterName: string; gsp: number }[]
-  // >([]);
   const [fighterToGsp, setFighterToGsp] = useState<{ [key in string]: number }>(
     {}
   );
@@ -68,6 +73,7 @@ export default function ClientTop() {
     const interval = setInterval(capture, 1000 / 30);
     return () => clearInterval(interval);
   });
+
   return (
     <>
       <div className="w-[640px] aspect-video">
@@ -87,16 +93,14 @@ export default function ClientTop() {
       <Ocr
         capImage={capImage}
         addFighter={(fighterName, gsp) => {
-          console.log("hoge", fighterName, gsp);
           setFighterToGsp({ ...fighterToGsp, [fighterName]: gsp });
-          //setFighters((fighters) => [...fighters, { fighterName, gsp }]);
         }}
-      ></Ocr>
+      />
       <div>{JSON.stringify(fighterToGsp)}</div>
 
-      {/* <div className="m-8">
-        <GspChart data={characterData} />
-      </div> */}
+      <div className="m-8">
+        <GspChart data={fighterToGsp} vipBorder={vipBorder} ranks={ranks} />
+      </div>
 
       <TierList data={tierList} />
     </>

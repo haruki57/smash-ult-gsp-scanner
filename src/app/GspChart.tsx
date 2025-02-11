@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 
 import {
@@ -12,16 +14,28 @@ import {
   Legend,
 } from "recharts";
 
-const TEMP_VIP_BORDER = 13755558;
-
+/*
 const multi = [
   1.105, 1.101, 1.099, 1.097, 1.095, 1.093, 1.09, 1.087, 1.084, 1.081, 1.076,
   1.054, 1.046, 1.039, 1.011,
 ];
+*/
 
-const GspChart = ({ data }: { data: { [name in string]: number } }) => {
+// 型定義を追加
+type Rank = {
+  name: string;
+  multiplier: number;
+};
+
+interface GspChartProps {
+  data: { [name: string]: number };
+  vipBorder: number;
+  ranks: Rank[];
+}
+
+const GspChart = ({ data, vipBorder, ranks }: GspChartProps) => {
   const [startFromZero, setStartFromZero] = useState<boolean>(true);
-  const minPower = startFromZero ? 0 : TEMP_VIP_BORDER;
+  const minPower = startFromZero ? 0 : vipBorder;
   const ticks = startFromZero
     ? [5000000, 10000000, 15000000]
     : [minPower, 15000000];
@@ -32,16 +46,15 @@ const GspChart = ({ data }: { data: { [name in string]: number } }) => {
     gsp: Math.max(minPower, gsp),
   }));
 
-  const lines = [];
-  for (let i = 0; i < multi.length; i++) {
-    lines.push(TEMP_VIP_BORDER * multi[i]);
-  }
-  console.log(data);
+  const lines = ranks.map((rank) => ({
+    gsp: vipBorder * rank.multiplier,
+    name: rank.name,
+  }));
 
   return (
     <div>
       <button onClick={() => setStartFromZero(!startFromZero)}>
-        {startFromZero ? "Start from 0" : `Start from ${TEMP_VIP_BORDER}`}
+        {startFromZero ? "Start from 0" : `Start from ${vipBorder}`}
       </button>
       <ResponsiveContainer width="100%" height={400}>
         <BarChart
@@ -61,14 +74,16 @@ const GspChart = ({ data }: { data: { [name in string]: number } }) => {
           {/* 参照線を追加 */}
           {}
           {/* 参照線とラベルを追加 */}
-          {lines.map((gsp, idx) => (
+          {lines.map((line, idx) => (
             <ReferenceLine
-              key={gsp}
-              x={gsp}
+              key={line.gsp}
+              x={line.gsp}
               stroke="red"
               label={{
-                value: "low",
-                position: idx % 2 == 0 ? "top" : "insideTop",
+                value: line.name,
+                position: idx % 2 === 0 ? "top" : "insideTop",
+                fill: "red",
+                fontSize: 12,
               }}
             />
           ))}

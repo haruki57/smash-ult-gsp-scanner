@@ -22,7 +22,7 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
       });
       setOcrWorker(worker);
     }
-  }, []);
+  }, [ocrWorker]);
 
   useEffect(() => {
     initWorker(); // もし Worker が未初期化なら作成
