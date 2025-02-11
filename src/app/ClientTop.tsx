@@ -77,17 +77,19 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   return (
     <>
       <div className="w-[640px] aspect-video">
-        <Webcam
-          className="w-full aspect-video"
-          audio={false}
-          ref={webcamRef}
-          screenshotFormat="image/png"
-          videoConstraints={{
-            width: 1920,
-            height: 1080,
-            deviceId: videoId,
-          }}
-        />
+        {videoId && (
+          <Webcam
+            className="w-full aspect-video"
+            audio={false}
+            ref={webcamRef}
+            screenshotFormat="image/png"
+            videoConstraints={{
+              width: 1920,
+              height: 1080,
+              deviceId: videoId,
+            }}
+          />
+        )}
       </div>
       <VideoList setVideoId={setVideoId} />
       <Ocr

@@ -28,7 +28,14 @@ export const VideoList = ({ setVideoId }: Props) => {
 
   return (
     <>
-      <select onChange={(e) => setVideoId(e.target.value)}>
+      <select
+        onChange={(e) => {
+          setVideoId(e.target.value);
+        }}
+      >
+        <option value="" defaultChecked>
+          キャプチャーボードを選択してください
+        </option>
         {videos.map((video) => (
           <option key={video.deviceId} value={video.deviceId}>
             {video.label || `Camera ${video.deviceId}`}
