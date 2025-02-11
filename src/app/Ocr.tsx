@@ -53,7 +53,7 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
       const trimmedGsp = gsp?.data?.text?.trim();
       if (
         !gsp ||
-        Number.isNaN(Number(trimmedGsp.replace(".", "").replaceAll(",", "")))
+        Number.isNaN(Number(trimmedGsp.replaceAll(".", "").replaceAll(",", "")))
       ) {
         addFighter(fighterId, "no gsp");
         return;
@@ -63,10 +63,9 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
         fighterName?.data?.text?.trim() + " " + gsp?.data?.text?.trim();
       console.log(output);
       */
-
       addFighter(
         fighterId,
-        Number(trimmedGsp.replace(".", "").replaceAll(",", ""))
+        Number(trimmedGsp.replaceAll(".", "").replaceAll(",", ""))
       );
       //await ocrWorker.terminate();
     })();
