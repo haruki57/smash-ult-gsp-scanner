@@ -2,10 +2,11 @@ import React, { useCallback, useEffect, useState } from "react";
 import CropImages from "./CropImages";
 import Tesseract, { createWorker } from "tesseract.js";
 import { getFighterId as getFighterId } from "@/utils/getFighterIdId";
+import { GspType } from "./ClientTop";
 
 type Props = {
   capImage: string;
-  addFighter: (fighterName: string, gsp: number) => void;
+  addFighter: (fighterName: string, gsp: GspType) => void;
 };
 
 export const Ocr = ({ capImage, addFighter }: Props) => {
@@ -47,16 +48,23 @@ export const Ocr = ({ capImage, addFighter }: Props) => {
       });
 
       const gsp = await ocrWorker.recognize(gspImage);
-      if (!gsp) {
+      const trimmedGsp = gsp?.data?.text?.trim();
+      if (
+        !gsp ||
+        Number.isNaN(Number(trimmedGsp.replace(".", "").replaceAll(",", "")))
+      ) {
+        addFighter(fighterId, "no gsp");
         return;
       }
+      /*
       const output =
         fighterName?.data?.text?.trim() + " " + gsp?.data?.text?.trim();
       console.log(output);
+      */
 
       addFighter(
         fighterId,
-        Number(gsp?.data?.text?.trim().replace(".", "").replaceAll(",", ""))
+        Number(trimmedGsp.replace(".", "").replaceAll(",", ""))
       );
       //await ocrWorker.terminate();
     })();

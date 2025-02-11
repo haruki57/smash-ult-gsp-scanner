@@ -18,22 +18,22 @@ interface ClientTopProps {
 }
 export type GspType = number | "no gsp" | undefined;
 
-const sampleFighterToGsp: { [key in string]: GspType } = {
-  mario: 14_000_000,
-  luigi: 15_000_000,
-  donkey: 15_000_000,
-  peach: 15_000_000,
-  yoshi: 15_000_000,
-  kirby: 15_000_000,
-  zelda: 15_000_000,
-  link: 15_000_000,
-  samus: 15_000_000,
-  ness: 15_000_000,
-  falco: 15_000_000,
-  marth: 15_000_000,
-  sheik: "no gsp",
-  lucina: undefined,
-};
+// const sampleFighterToGsp: { [key in string]: GspType } = {
+//   mario: 14_000_000,
+//   luigi: 15_000_000,
+//   donkey: 15_000_000,
+//   peach: 15_000_000,
+//   yoshi: 15_000_000,
+//   kirby: 15_000_000,
+//   zelda: 15_000_000,
+//   link: 15_000_000,
+//   samus: 15_000_000,
+//   ness: 15_000_000,
+//   falco: 15_000_000,
+//   marth: 15_000_000,
+//   sheik: "no gsp",
+//   lucina: undefined,
+// };
 
 const initialFighterToGsp: { [key in string]: GspType } = fighterIdList.reduce(
   (prev, id) => {
@@ -60,7 +60,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
     }
   }, [webcamRef]);
   useEffect(() => {
-    const interval = setInterval(capture, 1000 / 30);
+    const interval = setInterval(capture, 1000 / 15);
     return () => clearInterval(interval);
   });
 
@@ -90,7 +90,9 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
       <Ocr
         capImage={capImage}
         addFighter={(fighterName, gsp) => {
-          setFighterToGsp({ ...fighterToGsp, [fighterName]: gsp });
+          setFighterToGsp((fighterToGsp) => {
+            return { ...fighterToGsp, [fighterName]: gsp };
+          });
         }}
       />
       <div>{JSON.stringify(fighterToGsp)}</div>
@@ -109,8 +111,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
       <TierList
         vipBorder={vipBorder}
         ranks={ranks}
-        //fighterToGsp={fighterToGsp}
-        fighterToGsp={sampleFighterToGsp}
+        fighterToGsp={fighterToGsp}
       />
     </>
   );
