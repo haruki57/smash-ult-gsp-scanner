@@ -13,12 +13,11 @@ async function getVipData() {
 }
 
 export default async function Page() {
-  //const { vipBorder, ranks } = await getVipData();
+  const { vipBorder, ranks } = await getVipData();
 
   return (
     <div>
-      {/* <ClientTop vipBorder={vipBorder} ranks={ranks} /> */}
-      hoge
+      <ClientTop vipBorder={vipBorder} ranks={ranks} />
     </div>
   );
 }
