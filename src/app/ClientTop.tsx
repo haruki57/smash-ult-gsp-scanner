@@ -8,43 +8,6 @@ import GspChart from "./GspChart";
 import TierList from "./TierList";
 import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 
-const tierList = [
-  {
-    tierLabel: "S",
-    fighters: [
-      {
-        fighterId: "mario",
-        gsp: 15432456,
-      },
-      {
-        fighterId: "luigi",
-        gsp: 15432456,
-      },
-      {
-        fighterId: "donkey",
-        gsp: 15432456,
-      },
-    ],
-  },
-  {
-    tierLabel: "A",
-    fighters: [
-      {
-        fighterId: "mario",
-        gsp: 15432456,
-      },
-      {
-        fighterId: "luigi",
-        gsp: 15432456,
-      },
-      {
-        fighterId: "donkey",
-        gsp: 15432456,
-      },
-    ],
-  },
-];
-
 interface ClientTopProps {
   vipBorder: number;
   ranks: {
@@ -105,7 +68,27 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
         <GspChart data={fighterToGsp} vipBorder={vipBorder} ranks={ranks} />
       </div>
 
-      <TierList data={tierList} />
+      <TierList
+        vipBorder={vipBorder}
+        ranks={ranks}
+        //fighterToGsp={fighterToGsp}
+        fighterToGsp={{
+          mario: 14_000_000,
+          luigi: 15_000_000,
+          donkey: 15_000_000,
+          peach: 15_000_000,
+          yoshi: 15_000_000,
+          kirby: 15_000_000,
+          zelda: 15_000_000,
+          link: 15_000_000,
+          samus: 15_000_000,
+          ness: 15_000_000,
+          falco: 15_000_000,
+          marth: 15_000_000,
+          sheik: 15_000_000,
+          lucina: 15_000_000,
+        }}
+      />
     </>
   );
 }
