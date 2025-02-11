@@ -1,5 +1,6 @@
 import Image from "next/image";
-import React from "react";
+import React, { useRef } from "react";
+import html2canvas from "html2canvas";
 
 type Fighter = {
   fighterId: string;
@@ -60,33 +61,86 @@ const TierList: React.FC<TierListProps> = ({
   ranks,
   fighterToGsp,
 }) => {
+  const tierListRef = useRef<HTMLDivElement>(null);
   const data = generateTierList(fighterToGsp, vipBorder, ranks);
+
+  const handleDownload = async () => {
+    if (!tierListRef.current) return;
+
+    try {
+      const canvas = await html2canvas(tierListRef.current, {
+        backgroundColor: "#ffffff", // 背景色を白に設定
+        scale: 2, // 画質を上げるために2倍のスケールで描画
+      });
+
+      // canvasをPNG画像に変換
+      const image = canvas.toDataURL("image/png");
+
+      // ダウンロードリンクを作成
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = `tierlist-${new Date().toISOString().slice(0, 10)}.png`;
+
+      // リンクをクリックしてダウンロードを開始
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    } catch (error) {
+      console.error("画像の保存に失敗しました:", error);
+    }
+  };
+
   return (
-    <div className="flex flex-col w-full max-w-2xl mx-auto">
-      {data.map((tier) => (
-        <div key={tier.tierLabel} className="flex items-center mb-2">
-          <div className="w-10 h-10 flex items-center justify-center font-bold text-white bg-gray-800 mr-2 rounded">
-            {tier.tierLabel}
+    <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
+      <button
+        onClick={handleDownload}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors"
+      >
+        画像として保存
+      </button>
+
+      <div
+        ref={tierListRef}
+        className="flex flex-col w-full bg-white p-4 rounded"
+      >
+        {data.map((tier) => (
+          <div key={tier.tierLabel} className="flex mb-4">
+            <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center font-bold text-white bg-gray-800 mr-4 rounded">
+              {tier.tierLabel}
+            </div>
+            <div className="flex flex-wrap gap-2">
+              {tier.fighters.map((fighter) => (
+                <div key={fighter.fighterId} className="relative">
+                  <div className="border border-gray-500 rounded object-cover w-[40px] h-[40px]">
+                    {/* Image tag cannot be treated by html2canvas correctly */}
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      alt={fighter.fighterId}
+                      src={`/fighters/${fighter.fighterId}.png`}
+                      width={40}
+                      height={40}
+                    />
+                  </div>
+                  {/* <span className="absolute bottom-1 right-1 bg-black text-white text-xs px-1 py-0.5 rounded">
+                    {Math.floor(fighter.gsp / 1000)}k
+                  </span> */}
+                </div>
+              ))}
+            </div>
           </div>
-          {/* <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-2 flex-grow"> */}
-          <div className="flex flex-wrap gap-2">
-            {tier.fighters.map((fighter) => (
-              <div key={fighter.fighterId} className="relative">
-                <Image
-                  src={`/fighters/${fighter.fighterId}.png`}
-                  alt={fighter.fighterId}
-                  width={40}
-                  height={40}
-                  className="border border-gray-500 rounded"
-                />
-                {/* <span className="absolute bottom-1 right-4 bg-black text-white text-xs px-1 py-0.5 rounded">
-                  {Math.floor(fighter.gsp / 1000)}k
-                </span> */}
-              </div>
-            ))}
-          </div>
+        ))}
+        <div className="text-right text-gray-500 text-xs mt-4">
+          {`世界戦闘力の値は${new Date()
+            .toISOString()
+            .slice(0, 10)}時点でのクマメイトツール様の推定値を使用しています`}
         </div>
-      ))}
+        <div className="text-right text-gray-500 text-xs mt-4">
+          https://gsp-vis.harukisb.net/
+        </div>
+        <div className="text-right text-gray-500 text-xs">
+          Developed by @harukisb
+        </div>
+      </div>
     </div>
   );
 };
