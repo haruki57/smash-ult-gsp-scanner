@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useRef, useState } from "react";
-import html2canvas from "html2canvas";
+import React, { useRef } from "react";
 import { GspType } from "./ClientTop";
+import { toPng } from "html-to-image";
 
 type Fighter = {
   fighterId: string;
@@ -46,6 +46,7 @@ const generateTierList = (
   sortedFighters.forEach((fighter) => {
     const gsp = fighter.gsp;
     if (gsp === "no gsp" || gsp === undefined) {
+      tiers[tiers.length - 1].fighters.push(fighter);
       return;
     }
     const rank = ranks.find((rank) => gsp >= vipBorder * rank.multiplier);
@@ -69,19 +70,16 @@ const TierList: React.FC<TierListProps> = ({
 }) => {
   const tierListRef = useRef<HTMLDivElement>(null);
   const tierList = generateTierList(fighterToGsp, vipBorder, ranks);
-  const [saving, setSaving] = useState<boolean>(false);
 
   const handleDownload = async () => {
-    setSaving(true);
     setTimeout(async () => {
       try {
         if (!tierListRef.current) return;
-        const canvas = await html2canvas(tierListRef.current, {
+        const canvas = await toPng(tierListRef.current, {
           backgroundColor: "#ffffff", // 背景色を白に設定
-          scale: 2, // 画質を上げるために2倍のスケールで描画
         });
 
-        const image = canvas.toDataURL("image/png");
+        const image = canvas;
 
         const link = document.createElement("a");
         link.href = image;
@@ -90,7 +88,6 @@ const TierList: React.FC<TierListProps> = ({
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        setSaving(false);
       } catch (error) {
         console.error("画像の保存に失敗しました:", error);
       }
@@ -105,13 +102,8 @@ const TierList: React.FC<TierListProps> = ({
       >
         {tierList.map((tier) => (
           <div key={tier.tierLabel} className="flex mb-2">
-            <div className="w-[42px] h-[42px] px-3 text-center font-bold text-white bg-gray-800 mr-4 rounded">
-              {/* hack to prevent html2canvas from capturing the text below */}
-              {saving ? (
-                tier.tierLabel
-              ) : (
-                <div className="pt-2">{tier.tierLabel}</div>
-              )}
+            <div className="w-[42px] h-[42px] flex justify-center items-center px-4 text-center font-bold text-white bg-gray-800 mr-4 rounded">
+              {tier.tierLabel}
             </div>
             <div className="flex flex-wrap gap-2">
               {tier.fighters.map((fighter) => (
@@ -135,8 +127,8 @@ const TierList: React.FC<TierListProps> = ({
           </div>
         ))}
         <div className="flex justify-between">
-          <div className="text-gray-500 mt-4">
-            <div className="text-md font-bold">VIP率</div>
+          <div className="text-gray-500 text-xs mt-4">
+            <div>VIP率</div>
             <div className="text-md font-bold">
               {tierList
                 .filter((tier) => Number(tier.tierLabel) >= 10)
@@ -178,7 +170,7 @@ const TierList: React.FC<TierListProps> = ({
             ? "bg-gray-200 text-gray-500 hover:bg-gray-200"
             : "bg-blue-500")
         }
-        disabled={scannedFighters < 10}
+        disabled={scannedFighters < 86}
       >
         画像として保存
       </button>
