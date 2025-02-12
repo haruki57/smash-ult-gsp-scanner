@@ -6,7 +6,7 @@ import { GspType } from "./ClientTop";
 type Props = {
   gspImage: string;
   fighterNameImage: string;
-  addFighter: (fighterName: string, gsp: GspType) => void;
+  addFighter: (fighterName: string | undefined, gsp: GspType) => void;
 };
 
 export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
@@ -37,10 +37,6 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
         return;
       }
       const fighterId = getFighterId(fighterName?.data?.text?.trim());
-      if (!fighterId) {
-        console.log(fighterName?.data?.text?.trim(), fighterId);
-        return;
-      }
       setSet((set) => {
         return new Set([...set, fighterName?.data?.text?.trim()]);
       });
@@ -58,11 +54,6 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
         addFighter(fighterId, "no gsp");
         return;
       }
-      /*
-      const output =
-        fighterName?.data?.text?.trim() + " " + gsp?.data?.text?.trim();
-      console.log(output);
-      */
       addFighter(
         fighterId,
         Number(trimmedGsp.replaceAll(".", "").replaceAll(",", ""))

@@ -28,6 +28,7 @@ const initialFighterToGsp: { [key in string]: GspType } = fighterIdList.reduce(
 
 export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   const [videoId, setVideoId] = useState<string>("");
+  const [onlyGspCount, setOnlyGspCount] = useState<number>(0);
   const webcamRef = React.useRef<Webcam>(null);
   const [fighterToGsp, setFighterToGsp] =
     useState<{ [key in string]: GspType }>(initialFighterToGsp);
@@ -90,6 +91,14 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
             )}
           </div>
           <VideoList setVideoId={setVideoId} />
+          {onlyGspCount > 10 && (
+            <div className="text-red-500 my-4 font-bold">
+              言語設定を英語に切り替え忘れていませんか？
+              もし英語なのにうまく読み取れない場合は @harukisb
+              まで気軽にご連絡を！
+            </div>
+          )}
+
           <div className="mt-4">未スキャンファイター</div>
           <div className="flex flex-wrap gap-2">
             {unlistedFighters.map((fighterName) => (
@@ -122,6 +131,13 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
             gspImage={gspImage}
             fighterNameImage={fighterNameImage}
             addFighter={(fighterName, gsp) => {
+              if (fighterName === undefined && Number(gsp) >= 0) {
+                setOnlyGspCount((onlyGspCount) => onlyGspCount + 1);
+                return;
+              }
+              if (fighterName === undefined) {
+                return;
+              }
               if (fighterToGsp[fighterName]) {
                 return;
               }
