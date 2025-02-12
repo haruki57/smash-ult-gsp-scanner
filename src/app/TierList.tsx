@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { GspType } from "./ClientTop";
 import { toPng } from "html-to-image";
 
@@ -70,28 +70,30 @@ const TierList: React.FC<TierListProps> = ({
 }) => {
   const tierListRef = useRef<HTMLDivElement>(null);
   const tierList = generateTierList(fighterToGsp, vipBorder, ranks);
+  const [saving, setSaving] = useState<boolean>(false);
 
   const handleDownload = async () => {
-    setTimeout(async () => {
-      try {
-        if (!tierListRef.current) return;
-        const canvas = await toPng(tierListRef.current, {
-          backgroundColor: "#ffffff", // 背景色を白に設定
-        });
+    try {
+      if (!tierListRef.current) return;
+      setSaving(true);
+      const canvas = await toPng(tierListRef.current, {
+        backgroundColor: "#ffffff", // 背景色を白に設定
+      });
 
-        const image = canvas;
+      const image = canvas;
 
-        const link = document.createElement("a");
-        link.href = image;
-        link.download = `tierlist-${new Date().toISOString().slice(0, 10)}.png`;
+      const link = document.createElement("a");
+      link.href = image;
+      link.download = `tierlist-${new Date().toISOString().slice(0, 10)}.png`;
 
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-      } catch (error) {
-        console.error("画像の保存に失敗しました:", error);
-      }
-    }, 1);
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setSaving(false);
+    } catch (error) {
+      setSaving(false);
+      console.error("画像の保存に失敗しました:", error);
+    }
   };
 
   return (
@@ -165,16 +167,15 @@ const TierList: React.FC<TierListProps> = ({
       <button
         onClick={handleDownload}
         className={
-          "mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors " +
+          "w-40 mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors " +
           (scannedFighters < 86
             ? "bg-gray-200 text-gray-500 hover:bg-gray-200"
             : "bg-blue-500")
         }
-        disabled={scannedFighters < 86}
+        disabled={scannedFighters < 86 || saving}
       >
-        画像として保存
+        {saving ? "保存中..." : "画像として保存"}
       </button>
-      <div>{scannedFighters}</div>
     </div>
   );
 };
