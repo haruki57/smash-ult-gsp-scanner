@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import html2canvas from "html2canvas";
 import { GspType } from "./ClientTop";
 
@@ -41,7 +41,6 @@ const generateTierList = (
     tiers.push(tier);
   }
   tiers.push({ tierLabel: "~9", fighters: [] });
-  //tiers.push({ tierLabel: "未スキャン/未プレイ", fighters: [] });
 
   sortedFighters.forEach((fighter) => {
     const gsp = fighter.gsp;
@@ -58,7 +57,7 @@ const generateTierList = (
     }
   });
 
-  return tiers; //tiers.filter((tier) => tier.fighters.length > 0);
+  return tiers;
 };
 
 const TierList: React.FC<TierListProps> = ({
@@ -68,50 +67,49 @@ const TierList: React.FC<TierListProps> = ({
 }) => {
   const tierListRef = useRef<HTMLDivElement>(null);
   const data = generateTierList(fighterToGsp, vipBorder, ranks);
+  const [saving, setSaving] = useState<boolean>(false);
 
   const handleDownload = async () => {
-    if (!tierListRef.current) return;
+    setSaving(true);
+    setTimeout(async () => {
+      try {
+        if (!tierListRef.current) return;
+        const canvas = await html2canvas(tierListRef.current, {
+          backgroundColor: "#ffffff", // 背景色を白に設定
+          scale: 2, // 画質を上げるために2倍のスケールで描画
+        });
 
-    try {
-      const canvas = await html2canvas(tierListRef.current, {
-        backgroundColor: "#ffffff", // 背景色を白に設定
-        scale: 2, // 画質を上げるために2倍のスケールで描画
-      });
+        const image = canvas.toDataURL("image/png");
 
-      // canvasをPNG画像に変換
-      const image = canvas.toDataURL("image/png");
+        const link = document.createElement("a");
+        link.href = image;
+        link.download = `tierlist-${new Date().toISOString().slice(0, 10)}.png`;
 
-      // ダウンロードリンクを作成
-      const link = document.createElement("a");
-      link.href = image;
-      link.download = `tierlist-${new Date().toISOString().slice(0, 10)}.png`;
-
-      // リンクをクリックしてダウンロードを開始
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-    } catch (error) {
-      console.error("画像の保存に失敗しました:", error);
-    }
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        setSaving(false);
+      } catch (error) {
+        console.error("画像の保存に失敗しました:", error);
+      }
+    }, 1);
   };
 
   return (
     <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
-      <button
-        onClick={handleDownload}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors"
-      >
-        画像として保存
-      </button>
-
       <div
         ref={tierListRef}
         className="flex flex-col w-full bg-white p-4 rounded"
       >
         {data.map((tier) => (
-          <div key={tier.tierLabel} className="flex mb-4">
-            <div className="w-10 h-10 flex-shrink-0 flex items-center justify-center font-bold text-white bg-gray-800 mr-4 rounded">
-              {tier.tierLabel}
+          <div key={tier.tierLabel} className="flex mb-2">
+            <div className="w-10 h-10 text-center font-bold text-white bg-gray-800 mr-4 rounded">
+              {/* hack to prevent html2canvas from capturing the text below */}
+              {saving ? (
+                tier.tierLabel
+              ) : (
+                <div className="pt-2">{tier.tierLabel}</div>
+              )}
             </div>
             <div className="flex flex-wrap gap-2">
               {tier.fighters.map((fighter) => (
@@ -140,15 +138,15 @@ const TierList: React.FC<TierListProps> = ({
             .slice(0, 10)}時点でのVIPボーダー推定値: ${vipBorder}`}
         </div>
         <div className="text-right text-gray-500 text-xs">
-          世界戦闘力の値は時点での
           <a
             href="https://kumamate.net/vip/"
             target="_blank"
             rel="noopener noreferrer"
+            className="text-blue-500 text-xs"
           >
-            クマメイトツール様
+            クマメイトツール
           </a>
-          の推定値を使用しています
+          様の基準値を使用しています
         </div>
         <div className="text-right text-gray-500 text-xs mt-4">
           https://gsp-vis.harukisb.net/
@@ -157,6 +155,12 @@ const TierList: React.FC<TierListProps> = ({
           Developed by @harukisb
         </div>
       </div>
+      <button
+        onClick={handleDownload}
+        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors"
+      >
+        画像として保存
+      </button>
     </div>
   );
 };

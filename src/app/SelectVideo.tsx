@@ -39,6 +39,7 @@ export const VideoList = ({ setVideoId }: Props) => {
         onChange={(e) => {
           setVideoId(e.target.value);
         }}
+        className="w-full p-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
       >
         <option value="" defaultChecked>
           キャプチャーボードを選択してください

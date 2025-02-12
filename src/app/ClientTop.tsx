@@ -81,70 +81,82 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   const unlistedFighters = Object.keys(fighterToGsp).filter(
     (fighter) => fighterToGsp[fighter] === undefined
   );
+  const noGspFighters = Object.keys(fighterToGsp).filter(
+    (fighter) => fighterToGsp[fighter] === "no gsp"
+  );
 
   return (
-    <>
-      <div className="w-[640px] aspect-video">
-        {videoId && (
-          <Webcam
-            className="w-full aspect-video"
-            audio={false}
-            ref={webcamRef}
-            screenshotFormat="image/png"
-            videoConstraints={{
-              width: 1920,
-              height: 1080,
-              deviceId: videoId,
+    <div className="flex justify-center  overflow-x-auto min-w-[1120px]">
+      <div className="flex">
+        <div className="w-[480px] flex-shrink-0">
+          <div className="text-2xl font-bold my-2">GSP Visualizer</div>
+          <div className="aspect-video">
+            {videoId ? (
+              <Webcam
+                className="w-full aspect-video"
+                audio={false}
+                ref={webcamRef}
+                screenshotFormat="image/png"
+                videoConstraints={{
+                  width: 1920,
+                  height: 1080,
+                  deviceId: videoId,
+                }}
+              />
+            ) : (
+              <div className="w-full aspect-video bg-gray-200"></div>
+            )}
+          </div>
+          <VideoList setVideoId={setVideoId} />
+          <div className="mt-4">未スキャンファイター</div>
+          <div className="flex flex-wrap gap-2">
+            {unlistedFighters.map((fighterName) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={fighterName as string}
+                alt={fighterName}
+                width={40}
+                height={40}
+                src={`/fighters/${fighterName}.png`}
+                className="border border-gray-500 rounded"
+              />
+            ))}
+          </div>
+          <div className="mt-4">未プレイファイター(世界戦闘力なし)</div>
+          <div className="flex flex-wrap gap-2">
+            {noGspFighters.map((fighterName) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={fighterName as string}
+                alt={fighterName}
+                width={40}
+                height={40}
+                src={`/fighters/${fighterName}.png`}
+                className="border border-gray-500 rounded"
+              />
+            ))}
+          </div>
+          <Ocr
+            gspImage={gspImage}
+            fighterNameImage={fighterNameImage}
+            addFighter={(fighterName, gsp) => {
+              if (fighterToGsp[fighterName]) {
+                return;
+              }
+              setFighterToGsp((fighterToGsp) => {
+                return { ...fighterToGsp, [fighterName]: gsp };
+              });
             }}
           />
-        )}
-      </div>
-      <VideoList setVideoId={setVideoId} />
-      <div>{gspImage !== "" && <img src={gspImage} alt="" />}</div>
-      <div>
-        {fighterNameImage !== "" && <img src={fighterNameImage} alt="" />}
-      </div>
-
-      <div className="flex flex-wrap gap-2">
-        {unlistedFighters.map((fighterName) => (
-          <img
-            key={fighterName as string}
-            width={40}
-            height={40}
-            src={`/fighters/${fighterName}.png`}
-          />
-        ))}
-      </div>
-      <Ocr
-        gspImage={gspImage}
-        fighterNameImage={fighterNameImage}
-        addFighter={(fighterName, gsp) => {
-          if (fighterToGsp[fighterName]) {
-            return;
-          }
-          setFighterToGsp((fighterToGsp) => {
-            return { ...fighterToGsp, [fighterName]: gsp };
-          });
-        }}
-      />
-      <div>{JSON.stringify(fighterToGsp)}</div>
-
-      <div className="m-8">
-        <GspChart data={fighterToGsp} vipBorder={vipBorder} ranks={ranks} />
-      </div>
-
-      {unlistedFighters.length > 0 && (
-        <div className="m-8">
-          <div>未スキャン/未プレイ</div>
-          <div>{unlistedFighters.join(", ")}</div>
         </div>
-      )}
-
-      <TierList
-        vipBorder={vipBorder}
-        ranks={ranks}
-        fighterToGsp={fighterToGsp}
-      />
-    </>
+        <div className="w-[640px] flex-shrink-0">
+          <TierList
+            vipBorder={vipBorder}
+            ranks={ranks}
+            fighterToGsp={fighterToGsp}
+          />
+        </div>
+      </div>
+    </div>
   );
 }
