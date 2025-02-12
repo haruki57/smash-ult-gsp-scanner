@@ -23,6 +23,7 @@ type TierListProps = {
   fighterToGsp: {
     [key: string]: GspType;
   };
+  scannedFighters: number;
 };
 
 const generateTierList = (
@@ -64,9 +65,10 @@ const TierList: React.FC<TierListProps> = ({
   vipBorder,
   ranks,
   fighterToGsp,
+  scannedFighters,
 }) => {
   const tierListRef = useRef<HTMLDivElement>(null);
-  const data = generateTierList(fighterToGsp, vipBorder, ranks);
+  const tierList = generateTierList(fighterToGsp, vipBorder, ranks);
   const [saving, setSaving] = useState<boolean>(false);
 
   const handleDownload = async () => {
@@ -101,9 +103,9 @@ const TierList: React.FC<TierListProps> = ({
         ref={tierListRef}
         className="flex flex-col w-full bg-white p-4 rounded"
       >
-        {data.map((tier) => (
+        {tierList.map((tier) => (
           <div key={tier.tierLabel} className="flex mb-2">
-            <div className="w-10 h-10 text-center font-bold text-white bg-gray-800 mr-4 rounded">
+            <div className="w-[42px] h-[42px] px-3 text-center font-bold text-white bg-gray-800 mr-4 rounded">
               {/* hack to prevent html2canvas from capturing the text below */}
               {saving ? (
                 tier.tierLabel
@@ -132,35 +134,55 @@ const TierList: React.FC<TierListProps> = ({
             </div>
           </div>
         ))}
-        <div className="text-right text-gray-500 text-xs mt-4">
-          {`${new Date()
-            .toISOString()
-            .slice(0, 10)}時点でのVIPボーダー推定値: ${vipBorder}`}
-        </div>
-        <div className="text-right text-gray-500 text-xs">
-          <a
-            href="https://kumamate.net/vip/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-blue-500 text-xs"
-          >
-            クマメイトツール
-          </a>
-          様の基準値を使用しています
-        </div>
-        <div className="text-right text-gray-500 text-xs mt-4">
-          https://gsp-vis.harukisb.net/
-        </div>
-        <div className="text-right text-gray-500 text-xs">
-          Developed by @harukisb
+        <div className="flex justify-between">
+          <div className="text-gray-500 mt-4">
+            <div className="text-md font-bold">VIP率</div>
+            <div className="text-md font-bold">
+              {tierList
+                .filter((tier) => Number(tier.tierLabel) >= 10)
+                .reduce((acc, tier) => acc + tier.fighters.length, 0)}{" "}
+              / 86
+            </div>
+          </div>
+          <div>
+            <div className="text-right text-gray-500 text-xs mt-4">
+              {`${new Date()
+                .toISOString()
+                .slice(0, 10)}時点でのVIPボーダー推定値: ${vipBorder}`}
+            </div>
+            <div className="text-right text-gray-500 text-xs">
+              <a
+                href="https://kumamate.net/vip/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-500 text-xs"
+              >
+                クマメイトツール
+              </a>
+              様の基準値を使用しています
+            </div>
+            <div className="text-right text-gray-500 text-xs mt-4">
+              https://gsp-vis.harukisb.net/
+            </div>
+            <div className="text-right text-gray-500 text-xs">
+              Developed by @harukisb
+            </div>
+          </div>
         </div>
       </div>
       <button
         onClick={handleDownload}
-        className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors"
+        className={
+          "mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors " +
+          (scannedFighters < 86
+            ? "bg-gray-200 text-gray-500 hover:bg-gray-200"
+            : "bg-blue-500")
+        }
+        disabled={scannedFighters < 10}
       >
         画像として保存
       </button>
+      <div>{scannedFighters}</div>
     </div>
   );
 };

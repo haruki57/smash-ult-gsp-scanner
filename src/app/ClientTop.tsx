@@ -149,11 +149,15 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
             }}
           />
         </div>
-        <div className="w-[640px] flex-shrink-0">
+        <div className="w-[320px] flex-shrink-0">
           <TierList
             vipBorder={vipBorder}
             ranks={ranks}
             fighterToGsp={fighterToGsp}
+            scannedFighters={
+              Object.values(fighterToGsp).filter((gsp) => gsp !== undefined)
+                .length
+            }
           />
         </div>
       </div>
