@@ -11,7 +11,6 @@ type Props = {
 
 export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
   const [ocrWorker, setOcrWorker] = useState<Tesseract.Worker | null>(null);
-  const [set, setSet] = useState(new Set());
 
   const initWorker = useCallback(async () => {
     if (!ocrWorker) {
@@ -37,9 +36,6 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
         return;
       }
       const fighterId = getFighterId(fighterName?.data?.text?.trim());
-      setSet((set) => {
-        return new Set([...set, fighterName?.data?.text?.trim()]);
-      });
       if (gspImage === "") {
         addFighter(fighterId, "no gsp");
         return;
@@ -64,36 +60,7 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
     })();
   }, [gspImage, fighterNameImage, initWorker, ocrWorker, addFighter]);
 
-  return (
-    <>
-      <div>{set.size}</div>
-      {/*
-      
-      <div>
-        {Array.from(set).map((fighterName) => (
-          <img
-            key={fighterName as string}
-            width={60}
-            height={60}
-            src={`/fighters/${getCharacterId(fighterName as string)}.png`}
-          />
-        ))}
-      </div>
-      <pre>
-        {Array.from(set)
-          .map(
-            (fighterName) =>
-              fighterName + " " + getCharacterId(fighterName as string)
-          )
-          .join("\n")}
-      </pre>
-
-      <div>{gspImage != "" && <img src={gspImage} alt="" />}</div>
-      <div>
-        {fighterNameImage != "" && <img src={fighterNameImage} alt="" />}
-      </div> */}
-    </>
-  );
+  return <></>;
 };
 
 export default Ocr;

@@ -24,7 +24,22 @@ const greyAlgorithm: GreyAlgorithmCallback = (
   //return Math.round((red + green + blue) / 3);
 };
 
-export const CropImages = ({
+const isNoGsp = (processingImg: Image) => {
+  let sum = 0;
+  for (let y = 0; y < processingImg.height; y++) {
+    for (let x = 0; x < processingImg.width; x++) {
+      const pixel = processingImg.getPixelXY(x, y); // ピクセルの RGB 値を取得
+      const r = pixel[0];
+      if (r) {
+        sum += r;
+      }
+    }
+  }
+  // TODO VIDEO_SIZE_RATIOを使う。
+  return sum > 140000;
+};
+
+export const PreprocessImage = ({
   capImage,
   setGspImg,
   setFighterNameImg,
@@ -45,18 +60,8 @@ export const CropImages = ({
         })
         .grey({ algorithm: greyAlgorithm })
         .mask({ threshold: 180 });
-      let sum = 0;
-      for (let y = 0; y < processingImg.height; y++) {
-        for (let x = 0; x < processingImg.width; x++) {
-          const pixel = processingImg.getPixelXY(x, y); // ピクセルの RGB 値を取得
-          const r = pixel[0];
-          if (r) {
-            sum += r;
-          }
-        }
-      }
-      // magical number!!
-      if (sum > 140000) {
+
+      if (isNoGsp(processingImg)) {
         setGspImg("");
         setFighterNameImg("");
         return;
@@ -87,4 +92,4 @@ export const CropImages = ({
 
   return <></>;
 };
-export default CropImages;
+export default PreprocessImage;
