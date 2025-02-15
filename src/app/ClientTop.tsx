@@ -68,6 +68,10 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
     (fighter) => fighterToGsp[fighter] === "no gsp"
   );
 
+  const scannedFighterNum = Object.values(fighterToGsp).filter(
+    (gsp) => gsp !== undefined
+  ).length;
+
   return (
     <div className="flex justify-center  overflow-x-auto min-w-[1120px]">
       <div className="flex">
@@ -147,16 +151,37 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
             }}
           />
         </div>
+
         <div className="w-[640px] flex-shrink-0">
-          <TierList
-            vipBorder={vipBorder}
-            ranks={ranks}
-            fighterToGsp={fighterToGsp}
-            scannedFighters={
-              Object.values(fighterToGsp).filter((gsp) => gsp !== undefined)
-                .length
-            }
-          />
+          {scannedFighterNum == 0 ? (
+            <div className="flex flex-col items-center w-full max-w-4xl mx-10">
+              <div className="text-2xl font-bold my-2">使い方</div>
+              <div className="flex flex-col gap-2">
+                <div>
+                  1.
+                  このページ左の「キャプチャーボードを選ぶ」から、スマブラの画面を映したキャプチャーボードを選択してください。
+                </div>
+                <div>
+                  2.
+                  スマブラの言語設定を英語にしてください(めんどくさくてすみません)。
+                </div>
+                <div>
+                  3. オンラインから、ファイター選択画面に移動してください。
+                </div>
+                <div>
+                  4.
+                  カーソルをファイターに合わせると、世界戦闘力が読み込まれます！
+                </div>
+              </div>
+            </div>
+          ) : (
+            <TierList
+              vipBorder={vipBorder}
+              ranks={ranks}
+              fighterToGsp={fighterToGsp}
+              scannedFighters={scannedFighterNum}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -42,7 +42,7 @@ export const VideoList = ({ setVideoId }: Props) => {
         className="w-full p-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
       >
         <option value="" defaultChecked>
-          キャプチャーボードを選択してください
+          キャプチャーボードを選ぶ
         </option>
         {videos.map((video) => (
           <option key={video.deviceId} value={video.deviceId}>
