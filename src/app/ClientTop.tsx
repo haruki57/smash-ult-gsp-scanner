@@ -104,7 +104,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
           )}
 
           <div className="mt-4">未スキャンファイター</div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-2">
             {unlistedFighters.map((fighterName) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img
@@ -117,8 +117,9 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               />
             ))}
           </div>
+          <hr className="my-4"></hr>
           <div className="mt-4">未プレイファイター(世界戦闘力なし)</div>
-          <div className="flex flex-wrap gap-2">
+          <div className="flex flex-wrap gap-2 mt-2">
             {noGspFighters.map((fighterName) => (
               // eslint-disable-next-line @next/next/no-img-element
               <img
