@@ -1,6 +1,6 @@
 // 日本語の読み違いはブラウザや解像度によって違うので注意。ここに載っているはChromeのもの。
 
-const map: { [key in string]: string } = {
+const normalizeMap: { [key in string]: string } = {
   "Banjo&Kazooie": "banjo",
   "バンジョー&カズーイ": "banjo",
   "人ンジョー&カズーイ": "banjo",
@@ -220,13 +220,13 @@ const map: { [key in string]: string } = {
   ゼロスーツサムス:"zerosuit_samus", 
 } as const
 
-export const fighterIdList = Array.from(new Set(Object.values(map)));
+export const fighterIdList = Array.from(new Set(Object.values(normalizeMap)));
 
 const normalize = (name: string) => {
   return name.trim().replaceAll(" ", "").replaceAll(".", "").replaceAll(",", "").replaceAll("-", "").replaceAll("・", "").replaceAll("/", "");
 }
 
 export function getFighterId(name: string): string | undefined {
-  return map[normalize(name)]
+  return normalizeMap[normalize(name)]
 }
 

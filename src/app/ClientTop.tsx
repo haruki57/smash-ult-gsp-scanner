@@ -76,7 +76,20 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
     <div className="flex justify-center  overflow-x-auto min-w-[1120px]">
       <div className="flex">
         <div className="w-[480px] flex-shrink-0">
-          <div className="text-2xl font-bold my-2">GSP Visualizer</div>
+          <div className="flex justify-between items-center gap-2">
+            <div className="text-2xl font-bold my-2">GSP Visualizer</div>
+            <div className=" text-sm text-gray-500">
+              Developed by{" "}
+              <a
+                href="https://x.com/harukisb"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                @harukisb
+              </a>
+            </div>
+          </div>
+
           <div className="aspect-video">
             {videoId ? (
               <Webcam
@@ -153,7 +166,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
           />
         </div>
 
-        <div className="w-[640px] flex-shrink-0">
+        <div className="w-[640px] flex-shrink-0 mt-2">
           {scannedFighterNum == 0 ? (
             <div className="flex flex-col items-center w-full max-w-4xl mx-10">
               <div className="text-2xl font-bold my-2">使い方</div>
@@ -164,7 +177,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
                 </div>
                 <div>
                   2.
-                  スマブラの言語設定を英語にしてください(めんどくさくてすみません)。
+                  スマブラSPの言語設定を英語にしてください(めんどくさくてすみません)。
                 </div>
                 <div>
                   3. オンラインから、ファイター選択画面に移動してください。
