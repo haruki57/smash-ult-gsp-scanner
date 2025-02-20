@@ -150,6 +150,52 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               />
             ))}
           </div>
+          {scannedFighterNum > 0 && (
+            <>
+              <hr className="my-4"></hr>
+
+              <div className="w-64">
+                <button
+                  onClick={() => {
+                    const tsv = Object.entries(fighterToGsp)
+                      .sort(
+                        (a, b) =>
+                          fighterInfoMap[a[0]]?.order -
+                          fighterInfoMap[b[0]]?.order
+                      )
+                      .map(
+                        ([fighterName, gsp]) =>
+                          `${fighterInfoMap[fighterName]?.nameJpn}\t${
+                            gsp === "no gsp" || gsp === undefined ? "" : gsp
+                          }`
+                      )
+                      .join("\n");
+                    navigator.clipboard.writeText(tsv);
+                  }}
+                  className="mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  TSVとしてコピー
+                </button>
+                {Object.entries(fighterToGsp)
+                  .sort((a, b) => {
+                    return (
+                      fighterInfoMap[a[0]]?.order - fighterInfoMap[b[0]]?.order
+                    );
+                  })
+                  .map(([fighterName, gsp]) => (
+                    <div
+                      key={fighterName}
+                      className="flex items-center justify-between odd:bg-gray-100"
+                    >
+                      <span>{fighterInfoMap[fighterName]?.nameJpn}</span>
+                      <span>
+                        {gsp === "no gsp" || gsp === undefined ? "" : gsp}
+                      </span>
+                    </div>
+                  ))}
+              </div>
+            </>
+          )}
           <Ocr
             gspImage={gspImage}
             fighterNameImage={fighterNameImage}
