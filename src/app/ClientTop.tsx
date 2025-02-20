@@ -8,6 +8,7 @@ import TierList from "./TierList";
 import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 import { fighterIdList } from "@/utils/getFighterId";
 import processImage from "@/utils/processImage";
+import { fighterInfoMap } from "@/utils/fighterInfo";
 
 interface ClientTopProps {
   vipBorder: number;
@@ -61,12 +62,16 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
     return () => clearInterval(interval);
   }, [capture]);
 
-  const unlistedFighters = Object.keys(fighterToGsp).filter(
-    (fighter) => fighterToGsp[fighter] === undefined
-  );
-  const noGspFighters = Object.keys(fighterToGsp).filter(
-    (fighter) => fighterToGsp[fighter] === "no gsp"
-  );
+  const unlistedFighters = Object.keys(fighterToGsp)
+    .filter((fighter) => fighterToGsp[fighter] === undefined)
+    .sort((a, b) => {
+      return fighterInfoMap[a]?.order - fighterInfoMap[b]?.order;
+    });
+  const noGspFighters = Object.keys(fighterToGsp)
+    .filter((fighter) => fighterToGsp[fighter] === "no gsp")
+    .sort((a, b) => {
+      return fighterInfoMap[a]?.order - fighterInfoMap[b]?.order;
+    });
 
   const scannedFighterNum = Object.values(fighterToGsp).filter(
     (gsp) => gsp !== undefined
