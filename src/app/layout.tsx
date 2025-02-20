@@ -13,8 +13,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "GSP Visualizer",
-  description: "GSP Visualizer",
+  title: "世界戦闘力スキャナー",
+  description: "世界戦闘力スキャナー / GSP Scanner",
 };
 
 export default function RootLayout({

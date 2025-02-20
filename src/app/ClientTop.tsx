@@ -82,7 +82,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
       <div className="flex">
         <div className="w-[480px] flex-shrink-0">
           <div className="flex justify-between items-center gap-2">
-            <div className="text-2xl font-bold my-2">GSP Visualizer</div>
+            <div className="text-2xl font-bold my-2">世界戦闘力スキャナー</div>
             <div className=" text-sm text-gray-500">
               Developed by{" "}
               <a
