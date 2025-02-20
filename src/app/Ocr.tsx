@@ -54,7 +54,14 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
       }
       addFighter(
         fighterId,
-        parseInt(trimmedGsp.replaceAll(".", "").replaceAll(",", ""))
+        parseInt(
+          trimmedGsp
+            .replaceAll(".", "")
+            .replaceAll(",", "")
+            .replaceAll("l", "1")
+            .replaceAll("|", "1")
+            .replaceAll("O", "0")
+        )
       );
       //await ocrWorker.terminate();
     })();
