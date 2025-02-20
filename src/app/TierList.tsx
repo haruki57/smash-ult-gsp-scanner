@@ -98,6 +98,18 @@ const TierList: React.FC<TierListProps> = ({
 
   return (
     <div className="flex flex-col items-center w-full max-w-4xl mx-auto">
+      <button
+        onClick={handleDownload}
+        className={
+          "w-40 mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors " +
+          (scannedFighters < 86
+            ? "bg-gray-200 text-gray-500 hover:bg-gray-200"
+            : "bg-blue-500")
+        }
+        disabled={scannedFighters < 86 || saving}
+      >
+        {saving ? "保存中..." : "画像として保存"}
+      </button>
       <div
         ref={tierListRef}
         className="flex flex-col w-full bg-white p-4 rounded"
@@ -155,18 +167,6 @@ const TierList: React.FC<TierListProps> = ({
           </div>
         </div>
       </div>
-      <button
-        onClick={handleDownload}
-        className={
-          "w-40 mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors " +
-          (scannedFighters < 86
-            ? "bg-gray-200 text-gray-500 hover:bg-gray-200"
-            : "bg-blue-500")
-        }
-        disabled={scannedFighters < 86 || saving}
-      >
-        {saving ? "保存中..." : "画像として保存"}
-      </button>
     </div>
   );
 };
