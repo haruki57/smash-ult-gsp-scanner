@@ -5,7 +5,7 @@ async function getVipData() {
     process.env.NEXT_PUBLIC_API_URL + "/api/kumamate",
     {
       next: {
-        revalidate: 60 * 60, // 1 hour
+        revalidate: 60, // 1 min
       },
     }
   );
