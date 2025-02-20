@@ -171,19 +171,21 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
             <div className="flex flex-col items-center w-full max-w-4xl mx-10">
               <div className="text-2xl font-bold my-2">使い方</div>
               <div className="flex flex-col gap-2">
+                <div>1. パソコンとキャプチャーボードをつないでください。</div>
                 <div>
-                  1.
+                  2.
                   このページ左の「キャプチャーボードを選ぶ」から、スマブラの画面を映したキャプチャーボードを選択してください。
                 </div>
                 <div>
-                  2.
+                  3.
                   スマブラSPの言語設定を英語にしてください(めんどくさくてすみません)。
                 </div>
                 <div>
-                  3. オンラインから、ファイター選択画面に移動してください。
+                  4. トップ画面からOnline → Smash → Quick Play → Elite
+                  Smashと辿り、ファイター選択画面に移動してください。
                 </div>
                 <div>
-                  4.
+                  5.
                   カーソルをファイターに合わせると、世界戦闘力が読み込まれます！
                 </div>
               </div>
