@@ -128,16 +128,7 @@ const TierList: React.FC<TierListProps> = ({
             </div>
           </div>
         ))}
-        <div className="flex justify-between">
-          <div className="text-gray-500 text-xs mt-4">
-            <div>VIP率</div>
-            <div className="text-md font-bold">
-              {tierList
-                .filter((tier) => Number(tier.tierLabel) >= 10)
-                .reduce((acc, tier) => acc + tier.fighters.length, 0)}{" "}
-              / 86
-            </div>
-          </div>
+        <div className="flex justify-end">
           <div>
             <div className="text-right text-gray-500 text-xs mt-4">
               {`${new Date()
