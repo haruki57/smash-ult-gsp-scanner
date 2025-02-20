@@ -128,8 +128,8 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               <img
                 key={fighterName as string}
                 alt={fighterName}
-                width={40}
-                height={40}
+                width={30}
+                height={30}
                 src={`/fighters/${fighterName}.png`}
                 className="border border-gray-500 rounded"
               />
@@ -143,8 +143,8 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               <img
                 key={fighterName as string}
                 alt={fighterName}
-                width={40}
-                height={40}
+                width={30}
+                height={30}
                 src={`/fighters/${fighterName}.png`}
                 className="border border-gray-500 rounded"
               />
