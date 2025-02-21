@@ -108,8 +108,8 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
                 ref={webcamRef}
                 screenshotFormat="image/png"
                 videoConstraints={{
-                  // width: 1920,
-                  // height: 1080,
+                  width: videoConstraints.width,
+                  height: videoConstraints.height,
                   deviceId: videoId,
                 }}
               />

@@ -1,6 +1,6 @@
 "use client";
 
-// import { VIDEO_SIZE_RATIO } from "@/utils/commons";
+import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 import { useEffect, useState } from "react";
 
 type Props = {
@@ -14,8 +14,8 @@ export const VideoList = ({ setVideoId, videoConstraints }: Props) => {
     const constraints = {
       audio: false,
       video: {
-        width: videoConstraints.width,
-        height: videoConstraints.height,
+        width: videoConstraints.width / VIDEO_SIZE_RATIO,
+        height: videoConstraints.height / VIDEO_SIZE_RATIO,
       },
     };
     navigator.mediaDevices

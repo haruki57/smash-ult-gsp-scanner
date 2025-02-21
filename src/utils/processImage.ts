@@ -13,9 +13,9 @@ const greyAlgorithm: GreyAlgorithmCallback = (
 ) => {
   // 未プレイのファイターの数字の色は62 122 195
   // 既プレイは105 121 131
-  if (blue > 150) {
-    return 255;
-  }
+  // if (blue > 195) {
+  //   return 255;
+  // }
   // 加重平均法によるグレースケール変換
   return Math.round(0.2989 * red + 0.587 * green + 0.114 * blue);
   // 単純平均法によるグレースケール変換1
@@ -37,10 +37,17 @@ export const processImage = async ({ capturedImage, videoConstraints }: Props): 
       width: 300 * widthRatio  / VIDEO_SIZE_RATIO,
       height: 60 * heightRatio / VIDEO_SIZE_RATIO,
     })
-    .grey({ algorithm: greyAlgorithm })
-    .mask({ threshold: 180 });
 
-  const gspImage =  "data:image/png;base64," + (await processingImg.toBase64("image/png"));
+  let maxBlue = 0;
+  for (let y = 0; y < processingImg.height; y++) {
+    for (let x = 0; x < processingImg.width; x++) {
+      const pixel = processingImg.getPixelXY(x, y); // ピクセルの RGB 値を取得
+      const b = pixel[2];
+      maxBlue = Math.max(maxBlue, b);
+    }
+  }
+
+  const gspImage = "data:image/png;base64," + (await processingImg.grey({ algorithm: greyAlgorithm }).mask({ threshold: 180 }).toBase64("image/png"));
 
   const fighterNameImage = "data:image/png;base64," + (await originalImg
     .crop({
@@ -53,20 +60,11 @@ export const processImage = async ({ capturedImage, videoConstraints }: Props): 
     .mask({ threshold: 180 })
     .toBase64("image/png"));
   
-  let maxBlue = 0;
-  for (let y = 0; y < processingImg.height; y++) {
-    for (let x = 0; x < processingImg.width; x++) {
-      const pixel = processingImg.getPixelXY(x, y); // ピクセルの RGB 値を取得
-      const b = pixel[2];
-      if (b > maxBlue) {
-        maxBlue = b;
-      }
-    }
-  }
   // magic number!!
-  if (maxBlue > 180) {
+  if (maxBlue >= 254) {
     return { fighterNameImage, gspImage: "" };
   }
+  
   return { fighterNameImage, gspImage };
 };
 
