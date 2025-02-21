@@ -251,12 +251,25 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
                 </div>
                 <div>
                   4. トップ画面からOnline → Smash → Quick Play → Elite
-                  Smashと辿り、ファイター選択画面に移動してください。
+                  Smashと進み、ファイター選択画面に移動してください。
                 </div>
                 <div>
                   5.
                   カーソルをファイターに合わせると、世界戦闘力が読み込まれます！
                 </div>
+              </div>
+
+              <div className="text-2xl font-bold mt-8 my-2">
+                ゲーム画面が読み込めない場合
+              </div>
+              <div className="flex flex-col gap-2">
+                <div>
+                  ・OBSなど、カメラを使用している他のソフトやタブを閉じてみてください
+                </div>
+                <div>・解像度を変えてみてください</div>
+                <div>・ページをリロードしてみてください</div>
+                <div>・キャプチャーボードをつなぎ直してみてください</div>
+                <div>・OBSの仮想カメラ経由なら認識することがあるようです</div>
               </div>
             </div>
           ) : (
