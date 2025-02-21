@@ -13,8 +13,8 @@ export const VideoList = ({ setVideoId }: Props) => {
     const constraints = {
       audio: false,
       video: {
-        width: 1920 / VIDEO_SIZE_RATIO,
-        height: 1080 / VIDEO_SIZE_RATIO,
+        // width: 1920 / VIDEO_SIZE_RATIO,
+        // height: 1080 / VIDEO_SIZE_RATIO,
       },
     };
     navigator.mediaDevices
