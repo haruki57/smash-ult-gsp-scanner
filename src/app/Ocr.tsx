@@ -6,10 +6,16 @@ import { GspType } from "./ClientTop";
 type Props = {
   gspImage: string;
   fighterNameImage: string;
+  vipBorder: number;
   addFighter: (fighterName: string | undefined, gsp: GspType) => void;
 };
 
-export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
+export const Ocr = ({
+  gspImage,
+  vipBorder,
+  fighterNameImage,
+  addFighter,
+}: Props) => {
   const [ocrWorker, setOcrWorker] = useState<Tesseract.Worker | null>(null);
 
   const initWorker = useCallback(async () => {
@@ -52,20 +58,30 @@ export const Ocr = ({ gspImage, fighterNameImage, addFighter }: Props) => {
         addFighter(fighterId, "no gsp");
         return;
       }
-      addFighter(
-        fighterId,
-        parseInt(
-          trimmedGsp
-            .replaceAll(".", "")
-            .replaceAll(",", "")
-            .replaceAll("l", "1")
-            .replaceAll("|", "1")
-            .replaceAll("O", "0")
-        )
+      const parsedGsp = parseInt(
+        trimmedGsp
+          .replaceAll(".", "")
+          .replaceAll(",", "")
+          .replaceAll("l", "1")
+          .replaceAll("|", "1")
+          .replaceAll("O", "0")
       );
+
+      if (parsedGsp >= vipBorder * 1.5) {
+        // too high. something wrong
+        return;
+      }
+      addFighter(fighterId, parsedGsp);
       //await ocrWorker.terminate();
     })();
-  }, [gspImage, fighterNameImage, initWorker, ocrWorker, addFighter]);
+  }, [
+    gspImage,
+    fighterNameImage,
+    initWorker,
+    ocrWorker,
+    addFighter,
+    vipBorder,
+  ]);
 
   return <></>;
 };

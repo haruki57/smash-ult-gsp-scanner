@@ -231,6 +231,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
                 return { ...fighterToGsp, [fighterName]: gsp };
               });
             }}
+            vipBorder={vipBorder}
           />
         </div>
 
