@@ -22,9 +22,7 @@ export const VideoList = ({ setVideoId, videoConstraints }: Props) => {
       .getUserMedia(constraints)
       .then(() => {
         const getDevice = async () => {
-          const videos = (
-            await navigator.mediaDevices.enumerateDevices()
-          ).filter(({ kind }) => kind === "videoinput");
+          const videos = await navigator.mediaDevices.enumerateDevices(); //.filter(({ kind }) => kind === "videoinput");
           setVideoDevices(videos);
         };
         getDevice();
