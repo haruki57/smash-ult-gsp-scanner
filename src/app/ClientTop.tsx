@@ -227,9 +227,6 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               if (fighterName === undefined) {
                 return;
               }
-              if (fighterToGsp[fighterName]) {
-                return;
-              }
               setFighterToGsp((fighterToGsp) => {
                 return { ...fighterToGsp, [fighterName]: gsp };
               });
