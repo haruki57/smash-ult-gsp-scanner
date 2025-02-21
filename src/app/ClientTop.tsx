@@ -29,6 +29,10 @@ const initialFighterToGsp: { [key in string]: GspType } = fighterIdList.reduce(
 
 export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   const [videoId, setVideoId] = useState<string>("");
+  const [videoConstraints, setVideoConstraints] = useState({
+    width: 1920,
+    height: 1080,
+  });
   const [onlyGspCount, setOnlyGspCount] = useState<number>(0);
   const webcamRef = React.useRef<Webcam>(null);
   const [fighterToGsp, setFighterToGsp] =
@@ -38,8 +42,8 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
   const [fighterNameImage, setFighterNameImage] = useState<string>("");
   const capture = React.useCallback(async () => {
     const imageSrc = webcamRef.current?.getScreenshot({
-      width: 1920 / VIDEO_SIZE_RATIO,
-      height: 1080 / VIDEO_SIZE_RATIO,
+      width: videoConstraints.width / VIDEO_SIZE_RATIO,
+      height: videoConstraints.height / VIDEO_SIZE_RATIO,
     });
     if (!imageSrc) {
       return;
@@ -47,6 +51,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
     const { fighterNameImage: newFighterNameImage, gspImage: newGspImage } =
       await processImage({
         capturedImage: imageSrc,
+        videoConstraints,
       });
     if (newFighterNameImage === "" && gspImage === "") {
       return;
@@ -56,7 +61,7 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
       setFighterNameImage(newFighterNameImage);
       setGspImage(newGspImage);
     }
-  }, [webcamRef, fighterNameImage, gspImage]);
+  }, [webcamRef, fighterNameImage, gspImage, videoConstraints]);
   useEffect(() => {
     const interval = setInterval(capture, 1000 / 30);
     return () => clearInterval(interval);
@@ -112,7 +117,10 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               <div className="w-full aspect-video bg-gray-200"></div>
             )}
           </div>
-          <VideoList setVideoId={setVideoId} />
+          <VideoList
+            setVideoId={setVideoId}
+            videoConstraints={videoConstraints}
+          />
           {onlyGspCount > 10 && (
             <div className="text-red-500 my-4 font-bold">
               言語設定を英語に切り替え忘れていませんか？
@@ -120,6 +128,18 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               まで気軽にご連絡を！
             </div>
           )}
+
+          <div className="mt-4">解像度を選択</div>
+          <select
+            className="w-full p-2 border-2 border-gray-300 rounded-lg focus:border-blue-500 focus:outline-none"
+            onChange={(e) => {
+              const [width, height] = e.target.value.split(",").map(Number);
+              setVideoConstraints({ width, height });
+            }}
+          >
+            <option value="1920,1080">1080p</option>
+            <option value="1280,720">720p</option>
+          </select>
 
           <div className="mt-4">未スキャンファイター</div>
           <div className="flex flex-wrap gap-2 mt-2">

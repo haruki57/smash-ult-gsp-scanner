@@ -3,6 +3,7 @@ import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 
 interface Props {
   capturedImage: string;
+  videoConstraints: { width: number; height: number };
 }
 
 const greyAlgorithm: GreyAlgorithmCallback = (
@@ -21,18 +22,20 @@ const greyAlgorithm: GreyAlgorithmCallback = (
   //return Math.round((red + green + blue) / 3);
 };
 
-export const processImage = async ({ capturedImage }: Props): Promise<{fighterNameImage: string; gspImage: string}> => {
+export const processImage = async ({ capturedImage, videoConstraints }: Props): Promise<{fighterNameImage: string; gspImage: string}> => {
   const originalImg = await Image.load(capturedImage);
   if (!originalImg) {
     return { fighterNameImage: "", gspImage: "" };
   }
+  const widthRatio = videoConstraints.width / 1920;
+  const heightRatio = videoConstraints.height / 1080;
 
   const processingImg = originalImg
     .crop({
-      x: 1500 / VIDEO_SIZE_RATIO,
-      y: 720 / VIDEO_SIZE_RATIO,
-      width: 300 / VIDEO_SIZE_RATIO,
-      height: 60 / VIDEO_SIZE_RATIO,
+      x: 1500 * widthRatio / VIDEO_SIZE_RATIO,
+      y: 720 * heightRatio / VIDEO_SIZE_RATIO,
+      width: 300 * widthRatio  / VIDEO_SIZE_RATIO,
+      height: 60 * heightRatio / VIDEO_SIZE_RATIO,
     })
     .grey({ algorithm: greyAlgorithm })
     .mask({ threshold: 180 });
@@ -41,10 +44,10 @@ export const processImage = async ({ capturedImage }: Props): Promise<{fighterNa
 
   const fighterNameImage = "data:image/png;base64," + (await originalImg
     .crop({
-      x: 470 / VIDEO_SIZE_RATIO,
-      y: 845 / VIDEO_SIZE_RATIO,
-      width: 450 / VIDEO_SIZE_RATIO,
-      height: 70 / VIDEO_SIZE_RATIO,
+      x: 470 * widthRatio  / VIDEO_SIZE_RATIO,
+      y: 845 * heightRatio / VIDEO_SIZE_RATIO,
+      width: 450 * widthRatio  / VIDEO_SIZE_RATIO,
+      height: 70 * heightRatio / VIDEO_SIZE_RATIO,
     })
     .grey()
     .mask({ threshold: 180 })

@@ -5,16 +5,17 @@ import { useEffect, useState } from "react";
 
 type Props = {
   setVideoId: React.Dispatch<React.SetStateAction<string>>;
+  videoConstraints: { width: number; height: number };
 };
 
-export const VideoList = ({ setVideoId }: Props) => {
+export const VideoList = ({ setVideoId, videoConstraints }: Props) => {
   const [videos, setVideoDevices] = useState<MediaDeviceInfo[]>([]);
   useEffect(() => {
     const constraints = {
       audio: false,
       video: {
-        // width: 1920 / VIDEO_SIZE_RATIO,
-        // height: 1080 / VIDEO_SIZE_RATIO,
+        width: videoConstraints.width,
+        height: videoConstraints.height,
       },
     };
     navigator.mediaDevices
@@ -31,7 +32,7 @@ export const VideoList = ({ setVideoId }: Props) => {
       .catch((err) => {
         console.error(err);
       });
-  }, []);
+  }, [videoConstraints]);
 
   return (
     <>
