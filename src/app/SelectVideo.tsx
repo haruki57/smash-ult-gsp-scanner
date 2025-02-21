@@ -43,8 +43,8 @@ export const VideoList = ({ setVideoId, videoConstraints }: Props) => {
         <option value="" defaultChecked>
           キャプチャーボードを選ぶ
         </option>
-        {videos.map((video) => (
-          <option key={video.deviceId} value={video.deviceId}>
+        {videos.map((video, idx) => (
+          <option key={video.deviceId + idx} value={video.deviceId}>
             {video.label || `Camera ${video.deviceId}`}
           </option>
         ))}
