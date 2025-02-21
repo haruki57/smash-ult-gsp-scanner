@@ -1,6 +1,6 @@
 "use client";
 
-import { VIDEO_SIZE_RATIO } from "@/utils/commons";
+// import { VIDEO_SIZE_RATIO } from "@/utils/commons";
 import { useEffect, useState } from "react";
 
 type Props = {

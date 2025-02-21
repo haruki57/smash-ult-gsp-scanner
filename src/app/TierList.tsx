@@ -23,7 +23,6 @@ type TierListProps = {
   fighterToGsp: {
     [key: string]: GspType;
   };
-  scannedFighters: number;
 };
 
 const generateTierList = (
@@ -66,7 +65,6 @@ const TierList: React.FC<TierListProps> = ({
   vipBorder,
   ranks,
   fighterToGsp,
-  scannedFighters,
 }) => {
   const tierListRef = useRef<HTMLDivElement>(null);
   const tierList = generateTierList(fighterToGsp, vipBorder, ranks);
@@ -101,12 +99,9 @@ const TierList: React.FC<TierListProps> = ({
       <button
         onClick={handleDownload}
         className={
-          "w-40 mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors " +
-          (scannedFighters < 86
-            ? "bg-gray-200 text-gray-500 hover:bg-gray-200"
-            : "bg-blue-500")
+          "w-40 mb-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-400 transition-colors"
         }
-        disabled={scannedFighters < 86 || saving}
+        disabled={saving}
       >
         {saving ? "保存中..." : "画像として保存"}
       </button>

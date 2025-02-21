@@ -246,7 +246,6 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
               vipBorder={vipBorder}
               ranks={ranks}
               fighterToGsp={fighterToGsp}
-              scannedFighters={scannedFighterNum}
             />
           )}
         </div>
