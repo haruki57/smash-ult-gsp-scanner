@@ -50,18 +50,18 @@ export const processImage = async ({ capturedImage }: Props): Promise<{fighterNa
     .mask({ threshold: 180 })
     .toBase64("image/png"));
   
-  let sum = 0;
+  let maxBlue = 0;
   for (let y = 0; y < processingImg.height; y++) {
     for (let x = 0; x < processingImg.width; x++) {
       const pixel = processingImg.getPixelXY(x, y); // ピクセルの RGB 値を取得
-      const r = pixel[0];
-      if (r) {
-        sum += r;
+      const b = pixel[2];
+      if (b > maxBlue) {
+        maxBlue = b;
       }
     }
   }
   // magic number!!
-  if (sum > 140000) {
+  if (maxBlue > 180) {
     return { fighterNameImage, gspImage: "" };
   }
   return { fighterNameImage, gspImage };
