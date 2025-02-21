@@ -32,9 +32,9 @@ export const processImage = async ({ capturedImage, videoConstraints }: Props): 
 
   const processingImg = originalImg
     .crop({
-      x: 1500 * widthRatio / VIDEO_SIZE_RATIO,
+      x: 1540 * widthRatio / VIDEO_SIZE_RATIO,
       y: 720 * heightRatio / VIDEO_SIZE_RATIO,
-      width: 300 * widthRatio  / VIDEO_SIZE_RATIO,
+      width: 250 * widthRatio  / VIDEO_SIZE_RATIO,
       height: 60 * heightRatio / VIDEO_SIZE_RATIO,
     })
 
