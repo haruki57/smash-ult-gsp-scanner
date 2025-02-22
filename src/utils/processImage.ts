@@ -22,7 +22,7 @@ const greyAlgorithm: GreyAlgorithmCallback = (
   //return Math.round((red + green + blue) / 3);
 };
 
-export const processImage = async ({ capturedImage, videoConstraints }: Props): Promise<{fighterNameImage: string; gspImage: string}> => {
+export const processImage = async ({ capturedImage, videoConstraints }: Props): Promise<{ fighterNameImage: string; gspImage: string }> => {
   const originalImg = await Image.load(capturedImage);
   if (!originalImg) {
     return { fighterNameImage: "", gspImage: "" };
@@ -38,12 +38,12 @@ export const processImage = async ({ capturedImage, videoConstraints }: Props): 
       height: 60 * heightRatio / VIDEO_SIZE_RATIO,
     })
 
-  let maxBlue = 0;
+  let minBlue = 255; 
   for (let y = 0; y < processingImg.height; y++) {
     for (let x = 0; x < processingImg.width; x++) {
       const pixel = processingImg.getPixelXY(x, y); // ピクセルの RGB 値を取得
       const b = pixel[2];
-      maxBlue = Math.max(maxBlue, b);
+      minBlue = Math.min(minBlue, b)
     }
   }
 
@@ -61,7 +61,8 @@ export const processImage = async ({ capturedImage, videoConstraints }: Props): 
     .toBase64("image/png"));
   
   // magic number!!
-  if (maxBlue >= 254) {
+  // 未プレイファイターでは103か104くらい。既プレイは160くらい
+  if (minBlue >= 130) {
     return { fighterNameImage, gspImage: "" };
   }
   
