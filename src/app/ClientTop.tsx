@@ -86,39 +86,42 @@ export default function ClientTop({ vipBorder, ranks }: ClientTopProps) {
     <div className="flex justify-center  overflow-x-auto min-w-[1120px]">
       <div className="flex">
         <div className="w-[480px] flex-shrink-0">
-          <div className="flex justify-between items-center gap-2">
-            <div className="text-2xl font-bold my-2">
-              世界戦闘力スキャナー(β)
+          <div className="fixed w-[480px] z-50 bg-white">
+            <div className="flex justify-between items-center gap-2">
+              <div className="text-2xl font-bold my-2">
+                世界戦闘力スキャナー(β)
+              </div>
+              <div className=" text-sm text-gray-500">
+                Developed by{" "}
+                <a
+                  href="https://x.com/harukisb"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  @harukisb
+                </a>
+              </div>
             </div>
-            <div className=" text-sm text-gray-500">
-              Developed by{" "}
-              <a
-                href="https://x.com/harukisb"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                @harukisb
-              </a>
+            <div className="aspect-video">
+              {videoId ? (
+                <Webcam
+                  className="w-full aspect-video"
+                  audio={false}
+                  ref={webcamRef}
+                  screenshotFormat="image/png"
+                  videoConstraints={{
+                    width: videoConstraints.width,
+                    height: videoConstraints.height,
+                    deviceId: videoId,
+                  }}
+                />
+              ) : (
+                <div className="w-full aspect-video bg-gray-200"></div>
+              )}
             </div>
           </div>
+          <div className="h-[318px]"></div>
 
-          <div className="aspect-video">
-            {videoId ? (
-              <Webcam
-                className="w-full aspect-video"
-                audio={false}
-                ref={webcamRef}
-                screenshotFormat="image/png"
-                videoConstraints={{
-                  width: videoConstraints.width,
-                  height: videoConstraints.height,
-                  deviceId: videoId,
-                }}
-              />
-            ) : (
-              <div className="w-full aspect-video bg-gray-200"></div>
-            )}
-          </div>
           <VideoList
             setVideoId={setVideoId}
             videoConstraints={videoConstraints}
