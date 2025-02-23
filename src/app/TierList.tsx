@@ -88,6 +88,12 @@ const TierList: React.FC<TierListProps> = ({
       link.click();
       document.body.removeChild(link);
       setSaving(false);
+      window.open(
+        `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+          "\n#GSP_scanner #世界戦闘力スキャナー"
+        )}`,
+        "_blank"
+      );
     } catch (error) {
       setSaving(false);
       console.error("画像の保存に失敗しました:", error);
