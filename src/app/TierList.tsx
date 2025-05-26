@@ -90,7 +90,7 @@ const TierList: React.FC<TierListProps> = ({
       setSaving(false);
       window.open(
         `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-          "\n#GSP_scanner #世界戦闘力スキャナー"
+          "\nhttps://gsp-scanner.harukisb.net/\n#GSP_scanner #世界戦闘力スキャナー"
         )}`,
         "_blank"
       );
