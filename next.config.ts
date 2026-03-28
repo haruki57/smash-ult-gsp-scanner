@@ -1,13 +1,14 @@
 import type { NextConfig } from "next";
+import { setupDevPlatform } from "@cloudflare/next-on-pages/next-dev";
+
+if (process.env.NODE_ENV === "development") {
+  await setupDevPlatform();
+}
 
 const nextConfig: NextConfig = {
-  rules: {
-    "no-unused-vars": ["warn", { "argsIgnorePattern": "^_" }],
-  },
   eslint: {
     ignoreDuringBuilds: true,
-  }
-  /* config options here */
+  },
 };
 
 export default nextConfig;

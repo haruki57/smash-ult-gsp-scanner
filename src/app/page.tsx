@@ -1,19 +1,11 @@
-import ClientTop from "./ClientTop";
+export const runtime = 'edge';
+export const dynamic = 'force-dynamic';
 
-async function getVipData() {
-  const response = await fetch(
-    process.env.NEXT_PUBLIC_API_URL + "/api/kumamate",
-    {
-      next: {
-        revalidate: 60, // 1 min
-      },
-    }
-  );
-  return response.json();
-}
+import ClientTop from "./ClientTop";
+import { fetchVipData } from "../utils/fetchVipData";
 
 export default async function Page() {
-  const { vipBorder, ranks } = await getVipData();
+  const { vipBorder, ranks } = await fetchVipData();
 
   return (
     <div>
